@@ -19,6 +19,8 @@ public class RoyMovementPatternEditor : Editor
     SerializedProperty _aimLine;
     SerializedProperty _hookLine;
     SerializedProperty _royBodyView;
+    SerializedProperty _groundDetectorOffset;
+    SerializedProperty _groundDetectorSize;
     SerializedProperty _style;
 
     private void OnEnable()
@@ -37,6 +39,8 @@ public class RoyMovementPatternEditor : Editor
         _aimLine = serializedObject.FindProperty("_aimLine");
         _hookLine = serializedObject.FindProperty("_hookLine");
         _royBodyView = serializedObject.FindProperty("_royBodyView");
+        _groundDetectorOffset = serializedObject.FindProperty("_groundDetectorOffset");
+        _groundDetectorSize = serializedObject.FindProperty("_groundDetectorSize");
         _style = serializedObject.FindProperty("_style");
     }
 
@@ -86,8 +90,6 @@ public class RoyMovementPatternEditor : Editor
         }
         EditorGUILayout.EndFoldoutHeaderGroup();
 
-
-
         (target as RoyMovementPattern)._debbgOptions =
         EditorGUILayout.BeginFoldoutHeaderGroup((target as RoyMovementPattern)._groupConsume,
         new GUIContent("Debug Options"));
@@ -95,7 +97,17 @@ public class RoyMovementPatternEditor : Editor
         if ((target as RoyMovementPattern)._debbgOptions)
         {
             EditorGUILayout.PropertyField(_style, new GUIContent("Font Style"));
-            EditorGUILayout.PropertyField(_debugging, new GUIContent("DEBUGAR, right stick generic"));
+        }
+        EditorGUILayout.EndFoldoutHeaderGroup();
+
+        (target as RoyMovementPattern)._physicsSettings =
+        EditorGUILayout.BeginFoldoutHeaderGroup((target as RoyMovementPattern)._physicsSettings,
+        new GUIContent("Physics settings"));
+
+        if ((target as RoyMovementPattern)._physicsSettings)
+        {
+            EditorGUILayout.PropertyField(_groundDetectorOffset, new GUIContent("Offset of ground checker"));
+            EditorGUILayout.PropertyField(_groundDetectorSize, new GUIContent("Checker size"));
         }
         EditorGUILayout.EndFoldoutHeaderGroup();
 

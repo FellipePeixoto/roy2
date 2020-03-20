@@ -24,8 +24,11 @@ public class RoyMovementPattern : MonoBehaviour
     [SerializeField] LineRenderer _aimLine;
     [SerializeField] LineRenderer _hookLine;
     [SerializeField] GameObject _royBodyView;
+    [SerializeField] Vector3 _groundDetectorOffset;
+    [SerializeField] Vector3 _groundDetectorSize;
+    [SerializeField] FloatVarSO _gasLevel;
     [SerializeField] GUIStyle _style;
-    [SerializeField] bool _debugging;
+
 
     RoyStates _actualRootState;
     PlayerInputCustom _playerInputCustom;
@@ -50,7 +53,6 @@ public class RoyMovementPattern : MonoBehaviour
     
     RaycastHit _aimHitInfo;
 
-    bool _controlAssigned;
     bool _grapplePressed;
     bool _jumpPressed;
     bool _hasGrapplePoint;
@@ -58,14 +60,13 @@ public class RoyMovementPattern : MonoBehaviour
 
     bool _isBoosting;
     bool _isAiming;
-    public bool _facedRight;
-    [SerializeField] FloatVarSO _gasLevel;
+    bool _facedRight;
 
     public float IncreaseGasLevel
     {
         set
         {
-            _gasLevel.Value = Mathf.Clamp01(_gasLevel.Value + value);
+            _gasLevel.Value += value;
         }
     }
 
@@ -73,7 +74,7 @@ public class RoyMovementPattern : MonoBehaviour
     {
         get
         {
-            return Physics.Raycast(new Ray(transform.position, Vector3.down), 1.4f, 1 << _groundLayer);
+            return Physics.Raycast(new Ray(transform.position, Vector3.down), _groundDetectorOffset.y);
         }
     }
 
@@ -91,6 +92,7 @@ public class RoyMovementPattern : MonoBehaviour
     [HideInInspector] public bool _groupConstants;
     [HideInInspector] public bool _gameObjects;
     [HideInInspector] public bool _debbgOptions;
+    [HideInInspector] public bool _physicsSettings;
 #endif
 
     private void Awake()
@@ -109,19 +111,20 @@ public class RoyMovementPattern : MonoBehaviour
         _gasLevel.Value = 1;
         _aimInput = Vector2.up;
 
-        InputDevice inputDevice = PairingManager.Instance.TakeControlOf(Characters.Roy);
-        _playerInputCustom.devices = new InputDevice[] { inputDevice };
+        InputDevice[] inputDevices = PairingManager.Instance.TakeControlOf(Characters.Roy);
+        _playerInputCustom.devices = inputDevices;
 
-        _controlAssigned = inputDevice != null ? true : false;
-
-        _actionMove = _playerInputCustom.Gameplay.Move;
-        _actionJump = _playerInputCustom.Gameplay.Jump;
-        _actionInteract = _playerInputCustom.Gameplay.Interaction;
-        _actionBoost = _playerInputCustom.Gameplay.Boost;
-        _actionGrapple = _playerInputCustom.Gameplay.Grapple;
-        _actionSupport = _playerInputCustom.Gameplay.Support;
-        _actionOpenMap = _playerInputCustom.Gameplay.OpenMap;
-        _actionAim = _playerInputCustom.Gameplay.Aim;
+        if (inputDevices != null)
+        {
+            _actionMove = _playerInputCustom.Gameplay.Move;
+            _actionJump = _playerInputCustom.Gameplay.Jump;
+            _actionInteract = _playerInputCustom.Gameplay.Interaction;
+            _actionBoost = _playerInputCustom.Gameplay.Boost;
+            _actionGrapple = _playerInputCustom.Gameplay.Grapple;
+            _actionSupport = _playerInputCustom.Gameplay.Support;
+            _actionOpenMap = _playerInputCustom.Gameplay.OpenMap;
+            _actionAim = _playerInputCustom.Gameplay.Aim;
+        }
     }
 
     private void Start()
@@ -203,7 +206,7 @@ public class RoyMovementPattern : MonoBehaviour
                 _rb.MovePosition(_rb.position + moveInput3 * (_airSpeed + (_airSpeed * .3f * inputY)) * Time.fixedDeltaTime);
 
                 _rb.AddForce(Vector3.up * (-0.5f * Physics.gravity.y * inputY * Time.deltaTime), ForceMode.VelocityChange);
-                _gasLevel.Value = Mathf.Clamp01(_gasLevel.Value - (_mov1Charge / 100) * inputY * Time.fixedDeltaTime);
+                _gasLevel.Value -= (_mov1Charge / 100) * inputY * Time.fixedDeltaTime;
 
                 break;
 
@@ -218,7 +221,7 @@ public class RoyMovementPattern : MonoBehaviour
     private void Update()
     {
         _aimInput = _actionAim.ReadValue<Vector2>();
-        _hasGrapplePoint = _hasGrapplePoint = Physics.Raycast(transform.position, _aimInput.normalized, out _aimHitInfo, _grappleMax, 1 << _grappleLayer);
+        _hasGrapplePoint = _hasGrapplePoint = Physics.Raycast(new Ray(transform.position, _aimInput.normalized), out _aimHitInfo, _grappleMax);
 
         if (_hasGrapplePoint)
         {
@@ -233,21 +236,6 @@ public class RoyMovementPattern : MonoBehaviour
         if (_hasGrapplePoint)
         {
             Debug.DrawRay(transform.position, _aimInput.normalized * _aimHitInfo.distance, Color.red);
-        }
-
-        if (_debugging)
-        {
-            if (Input.GetAxisRaw("RightHorizontal") > 0 || Input.GetAxisRaw("RightVertical") > 0)
-            {
-                _aimController.SetAim(true);
-                _isAiming = true;
-                _aimInput = new Vector2(Input.GetAxisRaw("RightHorizontal"), Input.GetAxisRaw("RightVertical")).normalized;
-            }
-            else
-            {
-                _aimController.SetAim(false);
-                _isAiming = false;
-            }
         }
 #endif
 
