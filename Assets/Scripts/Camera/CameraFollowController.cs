@@ -6,22 +6,33 @@ public class CameraFollowController : MonoBehaviour
 {
     [SerializeField] GameObject _target;
     [SerializeField] Vector3 _offset;
-    
+
+    Rigidbody rb;
+
+    private void Start()
+    {
+        rb = _target.GetComponent<Rigidbody>();
+
+        if (!_target)
+            return;
+
+        transform.position = Vector3.Lerp
+            (transform.position,
+            new Vector3(_target.transform.position.x,
+            _target.transform.position.y + _offset.y,
+            transform.position.z + _offset.z), 15 * Time.smoothDeltaTime);
+    }
+
     private void FixedUpdate()
     {
         if (!_target)
             return;
 
-        var x = 1;
-
-        if (!_target.GetComponent<RoyMovementPattern>()._facedRight)
-            x = -1;
-
         transform.position = Vector3.Lerp
             (transform.position, 
-            new Vector3(_target.transform.position.x + (_offset.x * x),
+            new Vector3(_target.transform.position.x,
             _target.transform.position.y + _offset.y,
-            transform.position.z + _offset.z), 10 * Time.smoothDeltaTime);
+            transform.position.z + _offset.z), 15 * Time.smoothDeltaTime);
     }
 
     public void SetPlayer()
