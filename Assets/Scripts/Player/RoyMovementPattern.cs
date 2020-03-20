@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
-using UnityEngine.UI;
 
 public enum RoyStates : byte
 {
@@ -29,7 +28,7 @@ public class RoyMovementPattern : MonoBehaviour
     [SerializeField] bool _debugging;
 
     RoyStates _actualRootState;
-    PlayerInput _playerInput;
+    PlayerInputCustom _playerInputCustom;
     InputAction _actionMove;
     InputAction _actionJump;
     InputAction _actionInteract;
@@ -39,33 +38,27 @@ public class RoyMovementPattern : MonoBehaviour
     InputAction _actionOpenMap;
     InputAction _actionAim;
 
-    InputUser _royInput;
-
     Rigidbody _rb;
     SpringJoint _sprJoint;
     AimController _aimController;
-
-    Transform _actualMovAble;
 
     Vector2 _moveInput;
     Vector3 _aimInput;
 
     LayerMask _groundLayer;
     LayerMask _grappleLayer;
-
-    Coroutine _checkForGrapplePoints;
+    
     RaycastHit _aimHitInfo;
 
+    bool _controlAssigned;
     bool _grapplePressed;
     bool _jumpPressed;
-    bool _isGrounded;
     bool _hasGrapplePoint;
     bool _isGrapplingDone;
 
     bool _isBoosting;
     bool _isAiming;
     public bool _facedRight;
-    float _moveableDir;
     [SerializeField] FloatVarSO _gasLevel;
 
     public float IncreaseGasLevel
@@ -102,6 +95,8 @@ public class RoyMovementPattern : MonoBehaviour
 
     private void Awake()
     {
+        _playerInputCustom = new PlayerInputCustom();
+
         _actualRootState = RoyStates.none;
 
         _rb = GetComponent<Rigidbody>();
@@ -113,21 +108,24 @@ public class RoyMovementPattern : MonoBehaviour
         //TODO: valor de inicialização asset global
         _gasLevel.Value = 1;
         _aimInput = Vector2.up;
+
+        InputDevice inputDevice = PairingManager.Instance.TakeControlOf(Characters.Roy);
+        _playerInputCustom.devices = new InputDevice[] { inputDevice };
+
+        _controlAssigned = inputDevice != null ? true : false;
+
+        _actionMove = _playerInputCustom.Gameplay.Move;
+        _actionJump = _playerInputCustom.Gameplay.Jump;
+        _actionInteract = _playerInputCustom.Gameplay.Interaction;
+        _actionBoost = _playerInputCustom.Gameplay.Boost;
+        _actionGrapple = _playerInputCustom.Gameplay.Grapple;
+        _actionSupport = _playerInputCustom.Gameplay.Support;
+        _actionOpenMap = _playerInputCustom.Gameplay.OpenMap;
+        _actionAim = _playerInputCustom.Gameplay.Aim;
     }
 
     private void Start()
     {
-        _playerInput = GetComponent<PlayerInput>();
-
-        _actionMove = _playerInput.actions["Move"];
-        _actionJump = _playerInput.actions["Jump"];
-        _actionInteract = _playerInput.actions["Interaction"];
-        _actionBoost = _playerInput.actions["Boost"];
-        _actionGrapple = _playerInput.actions["Grapple"];
-        _actionSupport = _playerInput.actions["Support"];
-        _actionOpenMap = _playerInput.actions["OpenMap"];
-        _actionAim = _playerInput.actions["Aim"];
-
         _actionMove.performed += ctx =>
         {
             _moveInput = ctx.ReadValue<Vector2>();
@@ -157,18 +155,12 @@ public class RoyMovementPattern : MonoBehaviour
         {
             _isAiming = true;
             _aimController.SetAim(_isAiming);
-            //_checkForGrapplePoints = StartCoroutine(CheckForGrapplePoints());
         };
 
         _actionAim.canceled += ctx =>
         {
             _isAiming = false;
             _aimController.SetAim(_isAiming);
-            //if (_checkForGrapplePoints != null)
-            //{
-            //    StopCoroutine(_checkForGrapplePoints);
-            //    _checkForGrapplePoints = null;
-            //}
             SetAimLine(false, Vector3.zero);
         };
     }
@@ -320,15 +312,6 @@ public class RoyMovementPattern : MonoBehaviour
         }
     }
 
-    //IEnumerator CheckForGrapplePoints()
-    //{
-    //    _aimInput = _gameplayActions["Aim"].ReadValue<Vector2>();
-    //    if (_hasGrapplePoint = Physics.Raycast(transform.position, _aimInput.normalized, out _aimHitInfo, _grappleMax, 1 << _grappleLayer))
-    //        Debug.DrawRay(transform.position, _aimInput.normalized * _aimHitInfo.distance, Color.red);
-
-    //    yield return new WaitForFixedUpdate();
-    //}
-
     void SetAimLine(bool value, Vector3 point)
     {
         if (value)
@@ -436,6 +419,16 @@ public class RoyMovementPattern : MonoBehaviour
         }
 
         return RoyStates.none;
+    }
+
+    private void OnEnable()
+    {
+        _playerInputCustom.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _playerInputCustom.Disable();
     }
 
 #if UNITY_EDITOR
