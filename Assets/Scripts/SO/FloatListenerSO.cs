@@ -7,8 +7,16 @@ public class FloatListenerSO : MonoBehaviour
     [SerializeField] FloatVarSO floatSO;
     [SerializeField] UnityEventFloat onChangeValue;
 
-    private void OnEnable()
+    private void Awake()
     {
-        floatSO.onValueChanged += ctx => onChangeValue.Invoke(ctx);
+        floatSO.onValueChanged = (float value) =>
+        {
+            onChangeValue.Invoke(value);
+        };
+
+        floatSO.onSetValue = (float value) =>
+        {
+            onChangeValue.Invoke(value);
+        };
     }
 }

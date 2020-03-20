@@ -4,13 +4,13 @@
 public class IntVarSO : VariableValueSO<int>
 {
 #pragma warning disable IDE0044 // Adicionar modificador somente leitura
-    [SerializeField] [Tooltip("Restrict value to the range?")] bool inRange;
+    [SerializeField] [Tooltip("Restrict value to the range?")] bool _inRange;
 #pragma warning restore IDE0044 // Adicionar modificador somente leitura
 #pragma warning disable IDE0044 // Adicionar modificador somente leitura
-    [SerializeField] [Tooltip("The minimum value of range")] int min;
+    [SerializeField] [Tooltip("The minimum value of range")] int _min;
 #pragma warning restore IDE0044 // Adicionar modificador somente leitura
 #pragma warning disable IDE0044 // Adicionar modificador somente leitura
-    [SerializeField] [Tooltip("The maximum value of range")] int max;
+    [SerializeField] [Tooltip("The maximum value of range")] int _max;
 #pragma warning restore IDE0044 // Adicionar modificador somente leitura
 
     public new int Value
@@ -24,13 +24,13 @@ public class IntVarSO : VariableValueSO<int>
         {
             onSetValue?.Invoke(value);
 
-            if (inRange && value < min)
+            if (_inRange && value < _min)
             {
-                value = min;
+                value = _min;
             }
-            else if (inRange && value > max)
+            else if (_inRange && value > _max)
             {
-                value = max;
+                value = _max;
             }
 
             if (myValue != value)
