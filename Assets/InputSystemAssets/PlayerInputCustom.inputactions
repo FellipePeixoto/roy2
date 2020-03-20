@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInput",
+    "name": "PlayerInputCustom",
     "maps": [
         {
             "name": "UI",
@@ -9,15 +9,15 @@
                     "name": "Navigate",
                     "type": "Button",
                     "id": "7b46628b-d760-4b20-8aa4-147497701bad",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
                 {
-                    "name": "Navigate Bumpers",
+                    "name": "Navigate Tab",
                     "type": "Button",
                     "id": "773b002f-9711-4995-8fc5-9dcbade9b166",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -25,7 +25,7 @@
                     "name": "Submit",
                     "type": "Button",
                     "id": "c20b8be4-5fb6-44ea-829c-0e9fa9c7c42f",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -33,7 +33,15 @@
                     "name": "Return",
                     "type": "Button",
                     "id": "5f3ea573-e8a3-46ea-a2d6-602ab587ee88",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Delete",
+                    "type": "Button",
+                    "id": "aa2f35fa-8ada-46d7-b04e-c28fec8a7588",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -150,116 +158,6 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "GENERIC LEFT STICK",
-                    "id": "5731c3f8-4531-4b2e-a0cf-134af55f8981",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "eb003cab-0cdc-49d6-ad2c-f1f03402cabd",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/stick/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "88ad5d5c-0d96-4f53-8551-b81ba89beb85",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/stick/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "0c9b5e3f-7969-475d-aede-339de8bea699",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/stick/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "26b9d65c-dd47-487d-9dc6-944c849f90d0",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/stick/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "GENERIC D-PAD",
-                    "id": "15bd8196-a767-42c7-bdab-1325b8d742ea",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "48588b3a-7bcf-4d5a-830f-27afd652bfc2",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/hat/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "bb23a74e-e456-4cfd-a622-71630f4302e2",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/hat/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "a17ca791-c3fd-4348-af31-f2d7414d58ac",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/hat/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "e22f6edb-ba8a-46bb-a5af-0f88b83e947e",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/hat/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Navigate",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
                     "id": "e3b9a759-bd0a-4f5d-9f03-146424b3df80",
                     "path": "<XInputController>/buttonSouth",
@@ -272,7 +170,7 @@
                 },
                 {
                     "name": "",
-                    "id": "378149a6-2844-45d4-81fc-23771280f6f5",
+                    "id": "76e14785-8c05-4c96-8347-5f7bb8d49c15",
                     "path": "<XInputController>/buttonEast",
                     "interactions": "",
                     "processors": "",
@@ -282,13 +180,13 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Xbox LB|RB",
+                    "name": "XBOX BUMPERS",
                     "id": "cc9482ad-35dc-45fb-bb85-d9f50751f785",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Navigate Bumpers",
+                    "action": "Navigate Tab",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -299,7 +197,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Navigate Bumpers",
+                    "action": "Navigate Tab",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -310,7 +208,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Navigate Bumpers",
+                    "action": "Navigate Tab",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -321,7 +219,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Navigate Bumpers",
+                    "action": "Navigate Tab",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -332,9 +230,20 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Navigate Bumpers",
+                    "action": "Navigate Tab",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "b0579784-bd80-4f1c-a465-5f5e1bca11a3",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Delete",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -346,7 +255,7 @@
                     "name": "Move",
                     "type": "Button",
                     "id": "4b5bdacf-5c83-4510-ab0d-ed3bee29ee3a",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -354,7 +263,7 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "70482a40-daaa-4e2d-9b59-2dd04aea3884",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -362,7 +271,7 @@
                     "name": "Interaction",
                     "type": "Button",
                     "id": "5bd1c1a5-5d9c-43d1-95d2-84acf6764a00",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -370,7 +279,7 @@
                     "name": "Boost",
                     "type": "Button",
                     "id": "598726ad-83ad-483d-82bc-74d135c3f3d5",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -378,7 +287,7 @@
                     "name": "Grapple",
                     "type": "Button",
                     "id": "75f695c7-7bdb-454a-b18a-e12be838ec17",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -386,7 +295,7 @@
                     "name": "Support",
                     "type": "Button",
                     "id": "ea886efb-1e6f-43f5-a6f4-e08a9f0d0d10",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -394,7 +303,7 @@
                     "name": "OpenMap",
                     "type": "Button",
                     "id": "3ed00773-8ccf-4037-b089-713d5be490d2",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -402,7 +311,7 @@
                     "name": "Aim",
                     "type": "Button",
                     "id": "8ad8dfeb-93a9-4c01-bce9-e96b909194a6",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -531,30 +440,8 @@
                 },
                 {
                     "name": "",
-                    "id": "9119849a-81ca-4083-892a-d05e41edcb49",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/button3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "e3ce662b-9f33-4853-96ee-277f710be544",
                     "path": "<XInputController>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Interaction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9485707c-2bfd-4790-bd46-8611aae6e654",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/button4",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -608,17 +495,6 @@
                 },
                 {
                     "name": "",
-                    "id": "59183d02-e52a-4211-900f-910f0490e890",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Grapple",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "8bddf9c0-981f-4fdb-a75c-d942e06fbfaf",
                     "path": "<XInputController>/buttonEast",
                     "interactions": "",
@@ -630,30 +506,8 @@
                 },
                 {
                     "name": "",
-                    "id": "a0ed0002-b186-4928-b332-77eb50fe463e",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/button2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Support",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "18ebe438-4d42-4fe8-98f8-114f09629bc8",
                     "path": "<XInputController>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "OpenMap",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6859e7da-fd37-4e4f-9fdf-24eb389630fb",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/trigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -715,119 +569,21 @@
                     "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "GENERIC LEFT STICK",
-                    "id": "e1d383c3-56b9-408e-b458-df8a8cbfd19c",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "245c2f73-9e9f-446a-8002-0e90264b72f9",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/stick/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "00d5e5db-86d8-4566-8c95-a5a985fd4903",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/stick/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "690f2127-a65c-4d71-a181-c4299b31b3a2",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/stick/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "75207b5d-a044-4560-a496-a3a9045af374",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/stick/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "GENERIC D-PAD",
-                    "id": "6d405d9c-e098-4500-b082-746c15fed5a5",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "d17b8ab3-a23d-4041-9762-f231038afb3a",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/hat/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "dce01dbf-cba7-4ca3-af9c-2a01292f5f56",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/hat/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "846670ed-b9f6-4579-8b5e-20bfdd161c59",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/hat/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "2b2213da-6731-4d69-ab00-0b22e89872ae",
-                    "path": "<HID::DragonRise Inc.   Generic   USB  Joystick  >/hat/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "XInput",
+            "bindingGroup": "XInput",
+            "devices": [
+                {
+                    "devicePath": "<XInputController>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
 }
