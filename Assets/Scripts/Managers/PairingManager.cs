@@ -79,36 +79,31 @@ public class PairingManager : MonoBehaviour
         return false;
     }
 
-    public InputDevice TakeControlOf(Characters who)
+    public InputDevice[] TakeControlOf(Characters who)
     {
         switch (who)
         {
             case Characters.Klunk:
 
                 if (_player1.IAm == Characters.Klunk)
-                    return _player1.myInputDevice;
+                    return new InputDevice[] { _player1.myInputDevice };
 
                 if (_player2.IAm == Characters.Klunk)
-                    return _player2.myInputDevice;
+                    return new InputDevice[] { _player2.myInputDevice };
 
                 break;
 
             case Characters.Roy:
 
                 if (_player1.IAm == Characters.Roy)
-                    return _player1.myInputDevice;
+                    return new InputDevice[] { _player1.myInputDevice };
 
                 if (_player2.IAm == Characters.Roy)
-                    return _player2.myInputDevice;
+                    return new InputDevice[] { _player2.myInputDevice };
 
                 break;
         }
 
-        return null;
-    }
-
-    private void OnDisable()
-    {
-        
+        return InputSystem.devices.ToArray();
     }
 }
