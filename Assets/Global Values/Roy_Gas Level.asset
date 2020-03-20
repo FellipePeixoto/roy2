@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f11f8c620f8ece94caea7421a45f1899, type: 3}
   m_Name: Roy_Gas Level
   m_EditorClassIdentifier: 
-  nearValues: 1
-  inRange: 1
-  min: 0
-  max: 1
+  _nearValues: 0
+  _inRange: 1
+  _min: 0
+  _max: 1

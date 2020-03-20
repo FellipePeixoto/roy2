@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9134e125b6ab894295bc764cf5a3f01, type: 3}
   m_Name: PairedPlayers
   m_EditorClassIdentifier: 
-  _inRange: 0
+  _inRange: 1
   _min: 0
-  _max: 0
+  _max: 2

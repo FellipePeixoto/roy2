@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: LoadProgress
   m_EditorClassIdentifier: 
   _nearValues: 0
-  _inRange: 0
+  _inRange: 1
   _min: 0
-  _max: 0
+  _max: 1
