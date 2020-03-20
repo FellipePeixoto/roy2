@@ -80,7 +80,7 @@ MonoBehaviour:
   _minimumDistance: 0.5
   _start: {fileID: 186861483681205489}
   _end: {fileID: 186861484015890522}
-  stop: 0
+  stop: 1
 --- !u!1 &186861484015890523
 GameObject:
   m_ObjectHideFlags: 0
