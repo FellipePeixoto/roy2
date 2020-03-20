@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MOVEABLE_PLATAFORM
   - LoadScreen
+  - Manager
   layers:
   - Default
   - TransparentFX
