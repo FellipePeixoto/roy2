@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     public void CheckPlayersPaired()
     {
-        if (_playersPaired.Value == 2)
+        if (_playersPaired.Value == 1)
         {
             if (GameObject.FindGameObjectWithTag("LoadScreen"))
             {
@@ -40,6 +41,11 @@ public class GameManager : MonoBehaviour
 
             onAllPlayersPaired.Invoke();
         }
+    }
+
+    public void LoadLevelByScene(Object scene)
+    {
+        StartCoroutine(LoadSceneInBackground(scene.name));
     }
 
     public void LoadALevel(string name)
