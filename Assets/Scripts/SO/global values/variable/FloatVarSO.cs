@@ -45,4 +45,9 @@ public class FloatVarSO : VariableValueSO<float>
             }
         }
     }
+
+    public void Add(float value)
+    {
+        Value += value;
+    }
 }
