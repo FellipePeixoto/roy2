@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public enum Characters { None, Roy, Klunk}
 
@@ -16,6 +13,8 @@ public class PairingManager : MonoBehaviour
 
     PlayerControlInfo _player1;
     PlayerControlInfo _player2;
+
+    InputDevice[] inputDevices;
 
     struct PlayerControlInfo
     {
@@ -31,6 +30,21 @@ public class PairingManager : MonoBehaviour
             _player1 = new PlayerControlInfo() { IAm = Characters.None, myInputDevice = null};
             _player2 = new PlayerControlInfo() { IAm = Characters.None, myInputDevice = null};
             DontDestroyOnLoad(_instance);
+
+
+            //TODO: remover essa gabiarra
+#if UNITY_EDITOR
+            inputDevices = InputSystem.devices.ToArray();
+
+            if (inputDevices.Length == 2)
+            {
+                _player1.IAm = Characters.Roy;
+                _player2.IAm = Characters.Klunk;
+                _player1.myInputDevice = inputDevices[0];
+                _player2.myInputDevice = inputDevices[1];
+            }
+#endif
+
             return;
         }
 
@@ -102,6 +116,10 @@ public class PairingManager : MonoBehaviour
                     return new InputDevice[] { _player2.myInputDevice };
 
                 break;
+
+            default:
+
+                return InputSystem.devices.ToArray();
         }
 
         return InputSystem.devices.ToArray();

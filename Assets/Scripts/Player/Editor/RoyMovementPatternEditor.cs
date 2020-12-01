@@ -23,6 +23,8 @@ public class RoyMovementPatternEditor : Editor
     SerializedProperty _groundDetectorSize;
     SerializedProperty _style;
 
+    SerializedProperty quem;
+
     private void OnEnable()
     {
         _speed = serializedObject.FindProperty("_speed");
@@ -42,6 +44,8 @@ public class RoyMovementPatternEditor : Editor
         _groundDetectorOffset = serializedObject.FindProperty("_groundDetectorOffset");
         _groundDetectorSize = serializedObject.FindProperty("_groundDetectorSize");
         _style = serializedObject.FindProperty("_style");
+
+        quem = serializedObject.FindProperty("quem");
     }
 
     public override void OnInspectorGUI()
@@ -57,6 +61,7 @@ public class RoyMovementPatternEditor : Editor
             EditorGUILayout.PropertyField(_airSpeed, new GUIContent("Player Speed/s on Air"));
             EditorGUILayout.PropertyField(_jumpHeight, new GUIContent("Jump Height"));
             EditorGUILayout.PropertyField(_gasLevel, new GUIContent("Var Gas Level"));
+            EditorGUILayout.PropertyField(quem, new GUIContent("quem"));
         }
         EditorGUILayout.EndFoldoutHeaderGroup();
 

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 635244282097056145}
   - component: {fileID: 7665023116585943609}
   - component: {fileID: 635244282097056146}
+  - component: {fileID: 1787456863258460018}
   m_Layer: 2
   m_Name: Set_PlayerRoy
   m_TagString: Player
@@ -191,7 +192,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isActive: 1
-  _maxFric: {fileID: 13400000, guid: 868608b94e6e0334994e177da4ca99bd, type: 2}
 --- !u!136 &635244282097056145
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -235,6 +235,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
+--- !u!114 &1787456863258460018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635244282097056159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a65e919691b9bb4aafdebf76e39ded5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hardFric: {fileID: 13400000, guid: 868608b94e6e0334994e177da4ca99bd, type: 2}
 --- !u!1 &635244283566905964
 GameObject:
   m_ObjectHideFlags: 0

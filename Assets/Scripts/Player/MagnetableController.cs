@@ -5,18 +5,13 @@ using UnityEngine;
 
 public class MagnetableController : MonoBehaviour
 {
-    [SerializeField] bool _isActive;
-    [SerializeField] PhysicMaterial _maxFric;
+    [SerializeField] bool _isActive;    
 
     Rigidbody _rb;
-    float _maxDynFricBefore;
-    float _maxStaticFricBefore;
     bool IsActive { set => _isActive = value; }
 
     private void Awake()
     {
-        _maxDynFricBefore = _maxFric.dynamicFriction;
-        _maxStaticFricBefore = _maxFric.staticFriction;
         _rb = GetComponent<Rigidbody>();
     }
 
@@ -49,8 +44,7 @@ public class MagnetableController : MonoBehaviour
 
         if (magnetics.Length < 1)
         {
-            _maxFric.dynamicFriction = _maxDynFricBefore;
-            _maxFric.staticFriction = _maxStaticFricBefore;
+            SendMessage("OnRestoreFriction");
             return Vector3.zero;
         }
 
@@ -58,13 +52,11 @@ public class MagnetableController : MonoBehaviour
 
         if (notIgnored.Count() > 0)
         {
-            _maxFric.dynamicFriction = 0;
-            _maxFric.staticFriction = 0;
+            SendMessage("OnZeroFriction");
         }
         else
         {
-            _maxFric.dynamicFriction = _maxDynFricBefore;
-            _maxFric.staticFriction = _maxStaticFricBefore;
+            SendMessage("OnRestoreFriction");
         }
 
         Vector3 resultantForce = Vector3.zero;
@@ -78,11 +70,5 @@ public class MagnetableController : MonoBehaviour
         }
 
         return resultantForce;
-    }
-
-    private void OnDisable()
-    {
-        _maxFric.dynamicFriction = _maxDynFricBefore;
-        _maxFric.staticFriction = _maxStaticFricBefore;
     }
 }

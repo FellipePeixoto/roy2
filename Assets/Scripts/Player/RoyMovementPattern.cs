@@ -29,6 +29,8 @@ public class RoyMovementPattern : MonoBehaviour
     [SerializeField] FloatVarSO _gasLevel;
     [SerializeField] GUIStyle _style;
 
+    //TODO:remover essa gabiarra
+    [SerializeField] int quem;
 
     RoyStates _actualRootState;
     PlayerInputCustom _playerInputCustom;
@@ -111,19 +113,58 @@ public class RoyMovementPattern : MonoBehaviour
         _gasLevel.Value = 1;
         _aimInput = Vector2.up;
 
-        InputDevice[] inputDevices = PairingManager.Instance.TakeControlOf(Characters.Roy);
-        _playerInputCustom.devices = inputDevices;
-
-        if (inputDevices != null)
+        if (quem == 1)
         {
-            _actionMove = _playerInputCustom.Gameplay.Move;
-            _actionJump = _playerInputCustom.Gameplay.Jump;
-            _actionInteract = _playerInputCustom.Gameplay.Interaction;
-            _actionBoost = _playerInputCustom.Gameplay.Boost;
-            _actionGrapple = _playerInputCustom.Gameplay.Grapple;
-            _actionSupport = _playerInputCustom.Gameplay.Support;
-            _actionOpenMap = _playerInputCustom.Gameplay.OpenMap;
-            _actionAim = _playerInputCustom.Gameplay.Aim;
+            InputDevice[] inputDevices = PairingManager.Instance.TakeControlOf(Characters.Roy);
+            _playerInputCustom.devices = inputDevices;
+
+            if (inputDevices != null)
+            {
+                _actionMove = _playerInputCustom.Gameplay.Move;
+                _actionJump = _playerInputCustom.Gameplay.Jump;
+                _actionInteract = _playerInputCustom.Gameplay.Interaction;
+                _actionBoost = _playerInputCustom.Gameplay.Boost;
+                _actionGrapple = _playerInputCustom.Gameplay.Grapple;
+                _actionSupport = _playerInputCustom.Gameplay.Support;
+                _actionOpenMap = _playerInputCustom.Gameplay.OpenMap;
+                _actionAim = _playerInputCustom.Gameplay.Aim;
+            }
+        }
+
+        else if (quem == 2)
+        {
+            InputDevice[] inputDevices = PairingManager.Instance.TakeControlOf(Characters.Klunk);
+            _playerInputCustom.devices = inputDevices;
+
+            if (inputDevices != null)
+            {
+                _actionMove = _playerInputCustom.Gameplay.Move;
+                _actionJump = _playerInputCustom.Gameplay.Jump;
+                _actionInteract = _playerInputCustom.Gameplay.Interaction;
+                _actionBoost = _playerInputCustom.Gameplay.Boost;
+                _actionGrapple = _playerInputCustom.Gameplay.Grapple;
+                _actionSupport = _playerInputCustom.Gameplay.Support;
+                _actionOpenMap = _playerInputCustom.Gameplay.OpenMap;
+                _actionAim = _playerInputCustom.Gameplay.Aim;
+            }
+        }
+
+        else
+        {
+            InputDevice[] inputDevices = PairingManager.Instance.TakeControlOf(Characters.None);
+            _playerInputCustom.devices = inputDevices;
+
+            if (inputDevices != null)
+            {
+                _actionMove = _playerInputCustom.Gameplay.Move;
+                _actionJump = _playerInputCustom.Gameplay.Jump;
+                _actionInteract = _playerInputCustom.Gameplay.Interaction;
+                _actionBoost = _playerInputCustom.Gameplay.Boost;
+                _actionGrapple = _playerInputCustom.Gameplay.Grapple;
+                _actionSupport = _playerInputCustom.Gameplay.Support;
+                _actionOpenMap = _playerInputCustom.Gameplay.OpenMap;
+                _actionAim = _playerInputCustom.Gameplay.Aim;
+            }
         }
     }
 

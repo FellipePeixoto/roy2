@@ -1,18 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum Interactables { Door, Plate, Terminal }
 
 public class Interctable : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] Interactables _interactableType;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    protected bool _isInterctable;
 }
