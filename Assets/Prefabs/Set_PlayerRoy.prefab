@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7665023116585943609}
   - component: {fileID: 635244282097056146}
   - component: {fileID: 1787456863258460018}
+  - component: {fileID: 285075692}
   m_Layer: 2
   m_Name: Set_PlayerRoy
   m_TagString: Player
@@ -136,6 +137,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+  quem: 2
   _groupConsume: 1
   _groupConstants: 1
   _gameObjects: 1
@@ -248,6 +250,85 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hardFric: {fileID: 13400000, guid: 868608b94e6e0334994e177da4ca99bd, type: 2}
+--- !u!114 &285075692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635244282097056159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 909a8cba4572f13459ab2deeba0a19ef,
+    type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7b46628b-d760-4b20-8aa4-147497701bad
+    m_ActionName: UI/Navigate[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/dpad/up,/XInputControllerWindows/dpad/up,/XInputControllerWindows/dpad/up,/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/right,/XInputControllerWindows/dpad/right,/XInputControllerWindows/dpad/right]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 773b002f-9711-4995-8fc5-9dcbade9b166
+    m_ActionName: UI/Navigate Bumpers[/XInputControllerWindows/leftShoulder,/XInputControllerWindows/leftShoulder,/XInputControllerWindows/leftShoulder,/XInputControllerWindows/rightShoulder,/XInputControllerWindows/rightShoulder,/XInputControllerWindows/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c20b8be4-5fb6-44ea-829c-0e9fa9c7c42f
+    m_ActionName: UI/Submit[/XInputControllerWindows/buttonSouth,/XInputControllerWindows/buttonSouth,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5f3ea573-e8a3-46ea-a2d6-602ab587ee88
+    m_ActionName: UI/Return[/XInputControllerWindows/buttonEast,/XInputControllerWindows/buttonEast,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4b5bdacf-5c83-4510-ab0d-ed3bee29ee3a
+    m_ActionName: Gameplay/Move[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/dpad/up,/XInputControllerWindows/dpad/up,/XInputControllerWindows/dpad/up,/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/right,/XInputControllerWindows/dpad/right,/XInputControllerWindows/dpad/right]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 70482a40-daaa-4e2d-9b59-2dd04aea3884
+    m_ActionName: Gameplay/Jump[/XInputControllerWindows/buttonSouth,/XInputControllerWindows/buttonSouth,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5bd1c1a5-5d9c-43d1-95d2-84acf6764a00
+    m_ActionName: Gameplay/Interaction[/XInputControllerWindows/buttonWest,/XInputControllerWindows/buttonWest,/XInputControllerWindows/buttonWest]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 598726ad-83ad-483d-82bc-74d135c3f3d5
+    m_ActionName: Gameplay/Boost[/XInputControllerWindows/rightShoulder,/XInputControllerWindows/rightShoulder,/XInputControllerWindows/rightShoulder,/XInputControllerWindows/rightTrigger,/XInputControllerWindows/rightTrigger,/XInputControllerWindows/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 75f695c7-7bdb-454a-b18a-e12be838ec17
+    m_ActionName: Gameplay/Grapple[/XInputControllerWindows/leftShoulder,/XInputControllerWindows/leftShoulder,/XInputControllerWindows/leftShoulder,/XInputControllerWindows/leftTrigger,/XInputControllerWindows/leftTrigger,/XInputControllerWindows/leftTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ea886efb-1e6f-43f5-a6f4-e08a9f0d0d10
+    m_ActionName: Gameplay/Support[/XInputControllerWindows/buttonEast,/XInputControllerWindows/buttonEast,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3ed00773-8ccf-4037-b089-713d5be490d2
+    m_ActionName: Gameplay/OpenMap[/XInputControllerWindows/buttonNorth,/XInputControllerWindows/buttonNorth,/XInputControllerWindows/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8ad8dfeb-93a9-4c01-bce9-e96b909194a6
+    m_ActionName: Gameplay/Aim[/XInputControllerWindows/rightStick/up,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/rightStick/right,/XInputControllerWindows/rightStick/right,/XInputControllerWindows/rightStick/right]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Gameplay
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &635244283566905964
 GameObject:
   m_ObjectHideFlags: 0
