@@ -19,8 +19,8 @@ public class RoyMovementPattern : MonoBehaviour
     [SerializeField] float _jumpHeight;
     [SerializeField] float _stringForce;
     [SerializeField] float _damp;
-    [SerializeField] public float _mov1Charge;
-    [SerializeField] public float _mov2Charge;
+    [Range(0,1)] [SerializeField] public float _mov1Charge;
+    [Range(0, 1)] [SerializeField] public float _mov2Charge;
     [SerializeField] LineRenderer _aimLine;
     [SerializeField] LineRenderer _hookLine;
     [SerializeField] GameObject _royBodyView;
@@ -28,9 +28,6 @@ public class RoyMovementPattern : MonoBehaviour
     [SerializeField] Vector3 _groundDetectorSize;
     [SerializeField] FloatVarSO _gasLevel;
     [SerializeField] GUIStyle _style;
-
-    //TODO:remover essa gabiarra
-    [SerializeField] int quem;
 
     RoyStates _actualRootState;
     InputAction _actionMove;
@@ -114,8 +111,8 @@ public class RoyMovementPattern : MonoBehaviour
         _actionMove = playerInputComponent.actions["Move"];
         _actionJump = playerInputComponent.actions["Jump"];
         _actionInteract = playerInputComponent.actions["Interaction"];
-        _actionBoost = playerInputComponent.actions["Boost"];
-        _actionGrapple = playerInputComponent.actions["Grapple"];
+        _actionBoost = playerInputComponent.actions["Mov2"];
+        _actionGrapple = playerInputComponent.actions["Mov1"];
         _actionSupport = playerInputComponent.actions["Support"];
         _actionOpenMap = playerInputComponent.actions["OpenMap"];
         _actionAim = playerInputComponent.actions["Aim"];

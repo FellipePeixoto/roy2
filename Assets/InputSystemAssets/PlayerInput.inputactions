@@ -367,7 +367,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Boost",
+                    "name": "Mov2",
                     "type": "Button",
                     "id": "598726ad-83ad-483d-82bc-74d135c3f3d5",
                     "expectedControlType": "",
@@ -375,7 +375,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Grapple",
+                    "name": "Mov1",
                     "type": "Button",
                     "id": "75f695c7-7bdb-454a-b18a-e12be838ec17",
                     "expectedControlType": "",
@@ -547,7 +547,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Boost",
+                    "action": "Mov2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -558,7 +558,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Boost",
+                    "action": "Mov2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -569,7 +569,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Grapple",
+                    "action": "Mov1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -580,7 +580,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Grapple",
+                    "action": "Mov1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -666,8 +666,8 @@
     ],
     "controlSchemes": [
         {
-            "name": "Xbox Controller",
-            "bindingGroup": "Xbox Controller",
+            "name": "Xbox Gamepad",
+            "bindingGroup": "Xbox Gamepad",
             "devices": [
                 {
                     "devicePath": "<XInputController>",
