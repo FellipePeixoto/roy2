@@ -10,11 +10,13 @@ public class FrontAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         Debug.Log("HIT");
         OnTriggerEnterEvent?.Invoke(other.gameObject.layer);
-        if (other.gameObject.layer != LayerMask.NameToLayer("Weak_Wall"))
-            return;
 
-        other.gameObject.SetActive(false);
+        if (other.gameObject.GetComponent<WeakWallController>())
+        {
+            other.gameObject.GetComponent<WeakWallController>().BreakWall();
+        }
     }
 }

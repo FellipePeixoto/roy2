@@ -159,12 +159,10 @@ public class RoyMovementPattern : MonoBehaviour
         };
     }
 
-#if UNITY_EDITOR
     private void OnGUI()
     {
         GUI.Label(new Rect(0, 0, 250, 500), new GUIContent("GAS: " + _gasLevel.Value), _style);
-    } 
-#endif
+    }
 
     private void FixedUpdate()
     {

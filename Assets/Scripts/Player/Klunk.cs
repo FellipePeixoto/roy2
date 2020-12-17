@@ -12,23 +12,34 @@ enum KlunkState
 
 public class Klunk : MonoBehaviour
 {
-    [SerializeField] int _fuel = 100;
+    [Tooltip("Combustível e energia infinitos")]
+    [SerializeField] bool _infinityMode = false;
+
+    [Space]
+    [Header("VITALIDADE E ENERGIA")]
+    [SerializeField] int _maxFuel = 100;
+    [SerializeField] int _maxEnergy = 100;
+
+    [Space]
+    [Header("Investida com escudo")]
     [Tooltip("In Seconds")]
     [SerializeField] int _fuelTimeDuration = 600;
     [Tooltip("investida com seu escudo energizado")]
-    [SerializeField] int _dashFuel = 20;
-    [SerializeField] float _dashDistance = 10;
-    [SerializeField] float _dashSpeed = 35;
+    [SerializeField] int _dashEnergyCost = 20;
+    [SerializeField] float _dashMaxDistance = 10;
+    [Tooltip("Quantas vezes o dash é maior em relação a velocidade normal")]
+    [SerializeField] float _dashSpeedFactor = 2;
 
-    [SerializeField] int _sk8erBoiFuelPerSecond = 10;
-    [SerializeField] float _sk8Speed = 25;
-
-    [SerializeField] float _speed = 15;
-    [SerializeField] float _jumpHeight = 6;
+    [Space]
+    [Header("Movimentação com escudo")]
+    [SerializeField] int _sk8erBoiEnergyCostPerSecond = 10;
+    [Tooltip("Quantas vezes o skate é maior em relação a velocidade normal")]
+    [SerializeField] float _sk8SpeedFactor = 3;
 
     KlunkState _currentState;
     FrontAttack _frontAttack;
     CharacterController _characterController;
+    FrictionController _frictionController;
 
     InputAction _actionMove;
     InputAction _actionInteract;
@@ -38,21 +49,29 @@ public class Klunk : MonoBehaviour
     InputAction _actionSupport;
     InputAction _actionOpenMap;
 
+    int _currentFuel;
+    int _currentEnergy;
 
     float _fuelPerSecond;
-    float _remainingDashTime;
-    float _fuelConsumed;    
+    float _remainingTimeDash;
+    float _fuelConsumed;
+    float _energyConsumed;
     bool _actionMov2Pressed;
     bool _hitWallWhileDash;
 
+    Vector3 delete_start;
+
     private void Awake()
     {
+        _currentFuel = _maxFuel;
+        _currentEnergy = _maxEnergy;
         _frontAttack = GetComponentInChildren<FrontAttack>();
         _frontAttack.gameObject.SetActive(false);
         _frontAttack.OnTriggerEnterEvent += _frontAttackChecker_OnTriggerEnterEvent;
-        _fuelPerSecond = (float) _fuel / _fuelTimeDuration;
+        _fuelPerSecond = (float)_maxFuel / _fuelTimeDuration;
         _currentState = KlunkState.None;
         _characterController = GetComponent<CharacterController>();
+        _frictionController = GetComponent<FrictionController>();
         var playerInput = GetComponent<PlayerInput>();
         _actionMove = playerInput.actions["Move"];
         _actionJump = playerInput.actions["Jump"];
@@ -64,8 +83,7 @@ public class Klunk : MonoBehaviour
 
     private void _frontAttackChecker_OnTriggerEnterEvent(int layer)
     {
-        if (LayerMask.NameToLayer("Default") == layer ||
-            LayerMask.NameToLayer("Ground") == layer)
+        if (LayerMask.NameToLayer("Ground") == layer)
         {
             _hitWallWhileDash = true;
         }
@@ -81,76 +99,100 @@ public class Klunk : MonoBehaviour
         _actionMov2Pressed = false;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (_fuel <= 0)
+#if UNITY_EDITOR
+        if (_infinityMode)
+        {
+            _currentEnergy = _maxEnergy;
+            _currentFuel = _maxFuel;
+        }
+#endif
+        if (_currentFuel <= 0)
             return;
 
-        _fuelConsumed += _fuelPerSecond * Time.deltaTime;
+        _fuelConsumed += _fuelPerSecond * Time.fixedDeltaTime;
         if (_fuelConsumed >= 1)
         {
             _fuelConsumed -= 1;
-            _fuel--;
+            _currentFuel--;
         }
         switch (_currentState)
         {
             case KlunkState.Dashing:
-                if (_remainingDashTime <= 0 || _hitWallWhileDash)
+                if (_remainingTimeDash <= 0 || _hitWallWhileDash)
                 {
                     _currentState = KlunkState.None;
-                    _characterController.Velocity.x = 0;
+                    _characterController.IgnoreAirSpeed(false);
+                    _characterController.Move(0, 0, _actionJump.triggered);
                     _characterController.RemoveFreezeConstraint(RigidbodyConstraints.FreezePositionY);
                     _frontAttack.gameObject.SetActive(false);
                     _hitWallWhileDash = false;
-                    return;
+                    _frictionController.SetMaxFriction();
+                    _characterController.IgnoreHorizontalClampedSpeed(false);
+                    _characterController.IgnoreSpeedSmooth(false);
+                    _characterController.IncrementSpeed(true);
                 }
-                _remainingDashTime -= Time.deltaTime;
+                _remainingTimeDash -= Time.fixedDeltaTime;
                 break;
             case KlunkState.Sk8erBoi:
-                if (_fuel <= _sk8erBoiFuelPerSecond)
+                if (_currentEnergy <= 0)
                 {
                     _currentState = KlunkState.None;
                     return;
                 }
-                MoverHorizontal(_actionMove.ReadValue<Vector2>().normalized.x, _sk8Speed);
-                if (_actionJump.triggered)
+                _characterController.Move(_actionMove.ReadValue<Vector2>().normalized.x, _sk8SpeedFactor, _actionJump.triggered);
+                _energyConsumed += _sk8erBoiEnergyCostPerSecond * Time.fixedDeltaTime;
+                if (_energyConsumed >= 1)
                 {
-                    Jump();
+                    _energyConsumed -= 1;
+                    _currentEnergy--;
                 }
-                _fuelConsumed += _sk8erBoiFuelPerSecond * Time.deltaTime;
+                if (!_actionMov2Pressed)
+                {
+                    _currentState = KlunkState.None;
+                }
                 break;
             default:
-                MoverHorizontal(_actionMove.ReadValue<Vector2>().normalized.x, _speed);
-                if (_actionMov1.triggered && _actionMove.ReadValue<Vector2>().normalized.x != 0 && _fuel >= _dashFuel)
+                _characterController.Move(_actionMove.ReadValue<Vector2>().normalized.x, 1, _actionJump.triggered);
+                if (_actionMov1.triggered && _actionMove.ReadValue<Vector2>().normalized.x != 0 && _currentEnergy >= _dashEnergyCost)
                 {
-                    _characterController.Velocity.x = _actionMove.ReadValue<Vector2>().normalized.x * _dashSpeed;
+                    _characterController.IgnoreAirSpeed(true);
+                    _characterController.Move(_actionMove.ReadValue<Vector2>().normalized.x, _dashSpeedFactor, _actionJump.triggered);
                     _characterController.AddFreezeConstraint(RigidbodyConstraints.FreezePositionY);
                     _frontAttack.gameObject.SetActive(true);
-                    _remainingDashTime = _dashDistance / _dashSpeed;
+                    _remainingTimeDash = _dashMaxDistance / (_characterController.BaseSpeed * _dashSpeedFactor);
                     _currentState = KlunkState.Dashing;
-                    _fuel -= _dashFuel;
+                    _currentEnergy -= _dashEnergyCost;
+                    _frictionController.SetZeroFriction();
+                    _characterController.IgnoreHorizontalClampedSpeed(true);
+                    _characterController.IgnoreSpeedSmooth(true);
+                    _characterController.IncrementSpeed(false);
+                    delete_start = transform.position;
                     return;
                 }
-                else if (_actionMov2Pressed && _fuel > _sk8erBoiFuelPerSecond)
+                else if (_actionMov2Pressed && _currentEnergy > 0)
                 {
                     _currentState = KlunkState.Sk8erBoi;
                     return;
-                }
-                if (_actionJump.triggered)
-                {
-                    Jump();
                 }
                 break;
         }
     }
 
-    void MoverHorizontal(float dir, float speed)
+    private void OnGUI()
     {
-        _characterController.Velocity.x = dir * speed;
-    }
-
-    void Jump()
-    {
-        _characterController.Velocity.y = _jumpHeight;
+        GUI.BeginGroup(new Rect(1440, 720, 480, 360));
+        GUIStyle style = GUI.skin.box;
+        style.fontSize = 40;
+        style.wordWrap = true;
+        GUI.Box(new Rect(0, 0, 480, 45), $"FUEL: {_currentFuel}", style);
+        GUI.Box(new Rect(0, 45, 480, 45), $"ENERGY: {_currentEnergy}", style);
+        if (GUI.Button(new Rect(0, 90, 480, 45), "LIGAR/DESLIGAR INFINITO", style))
+        {
+            _infinityMode = !_infinityMode;
+        }
+        GUI.Box(new Rect(0, 135, 480, 45), $"INFINITO: {_infinityMode}", style);
+        GUI.EndGroup();
     }
 }

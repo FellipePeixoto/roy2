@@ -137,7 +137,6 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
-  quem: 2
   _groupConsume: 1
   _groupConstants: 1
   _gameObjects: 1
@@ -249,6 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a65e919691b9bb4aafdebf76e39ded5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _softFric: {fileID: 13400000, guid: e05b1438de1ce5d4ca9bdaf2fbfc368f, type: 2}
   _hardFric: {fileID: 13400000, guid: 868608b94e6e0334994e177da4ca99bd, type: 2}
 --- !u!114 &285075692
 MonoBehaviour:
