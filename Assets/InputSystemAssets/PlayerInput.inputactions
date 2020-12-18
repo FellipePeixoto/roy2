@@ -533,7 +533,7 @@
                     "name": "",
                     "id": "e3ce662b-9f33-4853-96ee-277f710be544",
                     "path": "<XInputController>/buttonWest",
-                    "interactions": "",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
                     "action": "Interaction",

@@ -10,8 +10,6 @@ public class FrontAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
-        Debug.Log("HIT");
         OnTriggerEnterEvent?.Invoke(other.gameObject.layer);
 
         if (other.gameObject.GetComponent<WeakWallController>())

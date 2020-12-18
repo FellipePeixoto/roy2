@@ -40,13 +40,12 @@ public class Klunk : MonoBehaviour
     FrontAttack _frontAttack;
     CharacterController _characterController;
     FrictionController _frictionController;
+    CapsuleCollider _capsuleCollider;
 
     InputAction _actionMove;
-    InputAction _actionInteract;
     InputAction _actionJump;
     InputAction _actionMov2;
     InputAction _actionMov1;
-    InputAction _actionSupport;
     InputAction _actionOpenMap;
 
     int _currentFuel;
@@ -72,6 +71,7 @@ public class Klunk : MonoBehaviour
         _currentState = KlunkState.None;
         _characterController = GetComponent<CharacterController>();
         _frictionController = GetComponent<FrictionController>();
+        _capsuleCollider = GetComponent<CapsuleCollider>();
         var playerInput = GetComponent<PlayerInput>();
         _actionMove = playerInput.actions["Move"];
         _actionJump = playerInput.actions["Jump"];
@@ -132,6 +132,7 @@ public class Klunk : MonoBehaviour
                     _characterController.IgnoreHorizontalClampedSpeed(false);
                     _characterController.IgnoreSpeedSmooth(false);
                     _characterController.IncrementSpeed(true);
+                    Debug.Log(Vector3.Distance(delete_start, transform.position));
                 }
                 _remainingTimeDash -= Time.fixedDeltaTime;
                 break;
@@ -141,7 +142,7 @@ public class Klunk : MonoBehaviour
                     _currentState = KlunkState.None;
                     return;
                 }
-                _characterController.Move(_actionMove.ReadValue<Vector2>().normalized.x, _sk8SpeedFactor, _actionJump.triggered);
+                _characterController.Move(_actionMove.ReadValue<Vector2>().x, Mathf.Abs(_actionMove.ReadValue<Vector2>().x) * _sk8SpeedFactor, _actionJump.triggered);
                 _energyConsumed += _sk8erBoiEnergyCostPerSecond * Time.fixedDeltaTime;
                 if (_energyConsumed >= 1)
                 {
@@ -154,11 +155,14 @@ public class Klunk : MonoBehaviour
                 }
                 break;
             default:
-                _characterController.Move(_actionMove.ReadValue<Vector2>().normalized.x, 1, _actionJump.triggered);
-                if (_actionMov1.triggered && _actionMove.ReadValue<Vector2>().normalized.x != 0 && _currentEnergy >= _dashEnergyCost)
+                _characterController.Move(_actionMove.ReadValue<Vector2>().x, Mathf.Abs(_actionMove.ReadValue<Vector2>().x), _actionJump.triggered);
+                if (_actionMov1.triggered && _currentEnergy >= _dashEnergyCost)
                 {
                     _characterController.IgnoreAirSpeed(true);
-                    _characterController.Move(_actionMove.ReadValue<Vector2>().normalized.x, _dashSpeedFactor, _actionJump.triggered);
+                    if (_characterController.FacedRight)
+                        _characterController.Move(1, _dashSpeedFactor, _actionJump.triggered);
+                    else
+                        _characterController.Move(-1, _dashSpeedFactor, _actionJump.triggered);
                     _characterController.AddFreezeConstraint(RigidbodyConstraints.FreezePositionY);
                     _frontAttack.gameObject.SetActive(true);
                     _remainingTimeDash = _dashMaxDistance / (_characterController.BaseSpeed * _dashSpeedFactor);
