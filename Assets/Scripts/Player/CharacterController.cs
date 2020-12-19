@@ -33,6 +33,8 @@ public class CharacterController : MonoBehaviour
     [SerializeField] float _baseSpeed = 15;
     [SerializeField] float _jumpHeight = 6;
     [SerializeField] float _airSpeedFactor = .65f;
+    [SerializeField] float _fallMultiply = 2.5f;
+    [SerializeField] float _lowJumpMultiply = 2f;
     Vector3 Velocity;
     Rigidbody _rb;
     bool _jump;
@@ -93,9 +95,16 @@ public class CharacterController : MonoBehaviour
                     Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y),
                     ForceMode.VelocityChange);
         }
-    }
 
-    float smothDelta;
+        if (_rb.velocity.y < 0)
+        {
+            _rb.velocity += Vector3.up * Physics.gravity.y * (_fallMultiply - 1) * Time.fixedDeltaTime;
+        }
+        else if(_rb.velocity.y > 0 && !_jump)
+        {
+            _rb.velocity += Vector3.up * Physics.gravity.y * (_lowJumpMultiply - 1) * Time.fixedDeltaTime;
+        }
+    }
 
     public void Move(float dir, float speedFactor, bool jump)
     {

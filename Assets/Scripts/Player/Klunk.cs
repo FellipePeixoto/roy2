@@ -57,6 +57,7 @@ public class Klunk : MonoBehaviour
     float _energyConsumed;
     bool _actionMov2Pressed;
     bool _hitWallWhileDash;
+    bool _jump;
 
     Vector3 delete_start;
 
@@ -75,10 +76,24 @@ public class Klunk : MonoBehaviour
         var playerInput = GetComponent<PlayerInput>();
         _actionMove = playerInput.actions["Move"];
         _actionJump = playerInput.actions["Jump"];
+        _actionJump.performed += _actionJump_performed;
+        _actionJump.canceled += _actionJump_canceled;
         _actionMov1 = playerInput.actions["Mov1"];
         _actionMov2 = playerInput.actions["Mov2"];
         _actionMov2.performed += _actionMov2_performed;
         _actionMov2.canceled += _actionMov2_canceled;
+    }
+
+    private void _actionJump_canceled(InputAction.CallbackContext obj)
+    {
+        Debug.Log("SOLTOU");
+        _jump = false;
+    }
+
+    private void _actionJump_performed(InputAction.CallbackContext obj)
+    {
+        Debug.Log("APERTOU");
+        _jump = true;
     }
 
     private void _frontAttackChecker_OnTriggerEnterEvent(int layer)
@@ -124,7 +139,7 @@ public class Klunk : MonoBehaviour
                 {
                     _currentState = KlunkState.None;
                     _characterController.IgnoreAirSpeed(false);
-                    _characterController.Move(0, 0, _actionJump.triggered);
+                    _characterController.Move(0, 0, _jump);
                     _characterController.RemoveFreezeConstraint(RigidbodyConstraints.FreezePositionY);
                     _frontAttack.gameObject.SetActive(false);
                     _hitWallWhileDash = false;
@@ -142,7 +157,7 @@ public class Klunk : MonoBehaviour
                     _currentState = KlunkState.None;
                     return;
                 }
-                _characterController.Move(_actionMove.ReadValue<Vector2>().x, Mathf.Abs(_actionMove.ReadValue<Vector2>().x) * _sk8SpeedFactor, _actionJump.triggered);
+                _characterController.Move(_actionMove.ReadValue<Vector2>().x, Mathf.Abs(_actionMove.ReadValue<Vector2>().x) * _sk8SpeedFactor, _jump);
                 _energyConsumed += _sk8erBoiEnergyCostPerSecond * Time.fixedDeltaTime;
                 if (_energyConsumed >= 1)
                 {
@@ -155,14 +170,14 @@ public class Klunk : MonoBehaviour
                 }
                 break;
             default:
-                _characterController.Move(_actionMove.ReadValue<Vector2>().x, Mathf.Abs(_actionMove.ReadValue<Vector2>().x), _actionJump.triggered);
+                _characterController.Move(_actionMove.ReadValue<Vector2>().x, Mathf.Abs(_actionMove.ReadValue<Vector2>().x), _jump);
                 if (_actionMov1.triggered && _currentEnergy >= _dashEnergyCost)
                 {
                     _characterController.IgnoreAirSpeed(true);
                     if (_characterController.FacedRight)
-                        _characterController.Move(1, _dashSpeedFactor, _actionJump.triggered);
+                        _characterController.Move(1, _dashSpeedFactor, _jump);
                     else
-                        _characterController.Move(-1, _dashSpeedFactor, _actionJump.triggered);
+                        _characterController.Move(-1, _dashSpeedFactor, _jump);
                     _characterController.AddFreezeConstraint(RigidbodyConstraints.FreezePositionY);
                     _frontAttack.gameObject.SetActive(true);
                     _remainingTimeDash = _dashMaxDistance / (_characterController.BaseSpeed * _dashSpeedFactor);
