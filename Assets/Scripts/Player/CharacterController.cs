@@ -37,12 +37,15 @@ public class CharacterController : MonoBehaviour
     [SerializeField] float _lowJumpMultiply = 2f;
     Vector3 Velocity;
     Rigidbody _rb;
+    float _baseSpeedMultiplier = 1;
+    float _horizontalInertia;
     bool _jump;
-    bool _jumped;
     bool _ignoreHorizontalSpeedClamp;
     bool _ignoreSpeedSmooth;
     bool _ignoreAirSpeed;
-    bool _incrementSpeed;
+    bool _dontIncrementSpeed;
+
+    public bool CanJump { get; set; } = true;
 
     public float BaseSpeed { get { return _baseSpeed; } }
     public bool FacedRight { get; private set; } = true;
@@ -58,6 +61,25 @@ public class CharacterController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_jump && IsGrounded() && CanJump)
+        {
+            //_rb.AddForce(
+            //        Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y),
+            //        ForceMode.VelocityChange);
+            _horizontalInertia = _rb.velocity.x;
+            _rb.velocity += Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y);
+            CanJump = false;
+        }
+
+        if (_rb.velocity.y < 0)
+        {
+            _rb.velocity += Vector3.up * Physics.gravity.y * (_fallMultiply - 1) * Time.fixedDeltaTime;
+        }
+        else if (_rb.velocity.y > 0 && !_jump)
+        {
+            _rb.velocity += Vector3.up * Physics.gravity.y * (_lowJumpMultiply - 1) * Time.fixedDeltaTime;
+        }
+
         Vector3 targetSpeed;
         if (IsGrounded())
         {
@@ -69,12 +91,19 @@ public class CharacterController : MonoBehaviour
             if (HasWalls())
                 multi = 0;
 
-            if (_incrementSpeed)
-                targetSpeed = new Vector3(_rb.velocity.x + (Velocity.x * multi), 0);
+            if (!_dontIncrementSpeed)
+            {
+                targetSpeed = new Vector3(_horizontalInertia * multi + (Velocity.x * multi), 0);
+            }
             else
+            {
                 targetSpeed = new Vector3(Velocity.x * multi, 0);
+            }
+
             if (!_ignoreHorizontalSpeedClamp)
-                targetSpeed = Vector3.ClampMagnitude(targetSpeed, _baseSpeed);
+            {
+                targetSpeed = Vector3.ClampMagnitude(targetSpeed, _baseSpeed * _baseSpeedMultiplier);
+            }
             targetSpeed.y = _rb.velocity.y;
         }
         _rb.velocity = targetSpeed;
@@ -88,21 +117,6 @@ public class CharacterController : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 180, 0);
             FacedRight = false;
-        }
-        if (_jump && IsGrounded())
-        {
-            _rb.AddForce(
-                    Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y),
-                    ForceMode.VelocityChange);
-        }
-
-        if (_rb.velocity.y < 0)
-        {
-            _rb.velocity += Vector3.up * Physics.gravity.y * (_fallMultiply - 1) * Time.fixedDeltaTime;
-        }
-        else if(_rb.velocity.y > 0 && !_jump)
-        {
-            _rb.velocity += Vector3.up * Physics.gravity.y * (_lowJumpMultiply - 1) * Time.fixedDeltaTime;
         }
     }
 
@@ -118,6 +132,11 @@ public class CharacterController : MonoBehaviour
             Velocity.x = dir * (_baseSpeed * _airSpeedFactor);
         }
         _jump = jump;
+    }
+
+    public void SetBaseSpeedMultiplier(float value)
+    {
+        _baseSpeedMultiplier = value;
     }
 
     public void AddFreezeConstraint(RigidbodyConstraints value)
@@ -144,9 +163,9 @@ public class CharacterController : MonoBehaviour
         _ignoreSpeedSmooth = value;
     }
 
-    public void IncrementSpeed(bool value)
+    public void DontIncrementSpeed(bool value)
     {
-        _incrementSpeed = value;
+        _dontIncrementSpeed = value;
     }
 
     bool IsGrounded()
@@ -155,14 +174,22 @@ public class CharacterController : MonoBehaviour
             _mainCollider.bounds.size.y * _yOffsetGround, 
             _mainCollider.bounds.size.z * _zOffsetGround);
 
-        Grounded = Physics.BoxCast
-            (_mainCollider.bounds.center, 
-            _vectorOffset / 2,
+        Grounded = Physics.SphereCast(
+            _mainCollider.bounds.center, 
+            _vectorOffset.x / 2, 
             -transform.up, 
             out _groundHitInfo, 
-            transform.rotation, 
-            _maxDistanceGroundHit,
+            _maxDistanceGroundHit, 
             _groundLayerMask);
+
+        //Grounded = Physics.BoxCast
+        //    (_mainCollider.bounds.center, 
+        //    _vectorOffset / 2,
+        //    -transform.up, 
+        //    out _groundHitInfo, 
+        //    transform.rotation, 
+        //    _maxDistanceGroundHit,
+        //    _groundLayerMask);
 
         return Grounded;
     }
@@ -199,7 +226,8 @@ public class CharacterController : MonoBehaviour
             //Draw a Ray forward from GameObject toward the hit
             Gizmos.DrawRay(_mainCollider.bounds.center, -transform.up * _groundHitInfo.distance);
             //Draw a cube that extends to where the hit exists
-            Gizmos.DrawWireCube(_mainCollider.bounds.center + -transform.up * _groundHitInfo.distance, _vectorOffset);
+            Gizmos.DrawWireSphere(_mainCollider.bounds.center + (-transform.up * _groundHitInfo.distance), _vectorOffset.x / 2);
+            //Gizmos.DrawWireCube(_mainCollider.bounds.center + -transform.up * _groundHitInfo.distance, _vectorOffset);
         }
         //If there hasn't been a hit yet, draw the ray at the maximum distance
         else
@@ -207,7 +235,8 @@ public class CharacterController : MonoBehaviour
             //Draw a Ray forward from GameObject toward the maximum distance
             Gizmos.DrawRay(_mainCollider.bounds.center, -transform.up * _maxDistanceGroundHit);
             //Draw a cube at the maximum distance
-            Gizmos.DrawWireCube(_mainCollider.bounds.center + -transform.up * _maxDistanceGroundHit, _vectorOffset);
+            Gizmos.DrawWireSphere(_mainCollider.bounds.center + (-transform.up * _maxDistanceGroundHit), _vectorOffset.x / 2);
+            //Gizmos.DrawWireCube(_mainCollider.bounds.center + -transform.up * _maxDistanceGroundHit, _vectorOffset);
         }
     }
 

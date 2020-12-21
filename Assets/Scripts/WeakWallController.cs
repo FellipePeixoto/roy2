@@ -14,5 +14,7 @@ public class WeakWallController : MonoBehaviour
     public void BreakWall()
     {
         col.enabled = false;
+        //TODO: REMOVER LINHA ABAIXO
+        gameObject.SetActive(false);
     }
 }

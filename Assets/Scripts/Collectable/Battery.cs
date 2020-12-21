@@ -19,7 +19,6 @@ public class Battery : MonoBehaviour
         if (hit)
         {
             transform.position = new Vector3(transform.position.x, hitInfo.point.y);
-            Debug.Log(hitInfo.collider.name);
         }
     }
 

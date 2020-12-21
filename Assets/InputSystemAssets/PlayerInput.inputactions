@@ -411,7 +411,7 @@
                 {
                     "name": "XBOX LEFT STICK",
                     "id": "92b21b6e-24aa-464c-9702-7d9aded02d2c",
-                    "path": "2DVector",
+                    "path": "2DVector(mode=2)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
