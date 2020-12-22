@@ -9,6 +9,7 @@ public class KlunkGameFeel : MonoBehaviour
     [Space]
 
     [Header("INVESTIDA")]
+    [SerializeField] GameObject _shieldObject;
     [SerializeField] GameObject _trailPrefab;
     [SerializeField] GameObject[] _dashTrailPoints;
     [Tooltip("EM SEGUNDOS")]
@@ -16,10 +17,11 @@ public class KlunkGameFeel : MonoBehaviour
 
     Klunk _klunk;
     GameObject[] _trailsObjects;
+    bool _dashing;
 
     private void Reset()
     {
-        _trailPrefab = Resources.Load<GameObject>("Prefabs/Set_Trail");
+        _trailPrefab = Resources.Load<GameObject>("Prefabs/Set_shielddash_trail");
     }
 
     private void Awake()
@@ -38,11 +40,13 @@ public class KlunkGameFeel : MonoBehaviour
 
     private void _klunk_OnEndSkate(Vector3 startPoint)
     {
-        if (_skateObject != null) _skateObject.SetActive(true);
+        if (_skateObject != null) _skateObject.SetActive(false);
     }
 
     private void _klunk_OnStartDash(Vector3 startPoint)
     {
+        _dashing = true;
+        if (_shieldObject != null) _shieldObject.SetActive(true);
         _trailsObjects = new GameObject[_dashTrailPoints.Length];
         for (int i = 0; i < _dashTrailPoints.Length; i++)
         {
@@ -54,9 +58,23 @@ public class KlunkGameFeel : MonoBehaviour
 
     private void _klunk_OnEndDash(Vector3 startPoint)
     {
+        _dashing = false;
+        if (_shieldObject != null) _shieldObject.SetActive(false);
         foreach(GameObject g in _trailsObjects)
         {
             Destroy(g.gameObject, timerToDestroyTrails);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (!_dashing)
+            return;
+
+        for (int i = 0; i < _dashTrailPoints.Length; i++)
+        {
+            _trailsObjects[i].transform.position = 
+                _dashTrailPoints[i].transform.position;
         }
     }
 
