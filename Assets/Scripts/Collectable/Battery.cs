@@ -24,7 +24,7 @@ public class Battery : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        RoyMovementPattern possivleRoy = other.GetComponent<RoyMovementPattern>();
+        Roy possivleRoy = other.GetComponent<Roy>();
 
         if (!possivleRoy)
             return;
