@@ -42,7 +42,6 @@ public class Klunk : MonoBehaviour
     FrontAttack _frontAttack;
     CharacterController _characterController;
     FrictionController _frictionController;
-    CapsuleCollider _capsuleCollider;
 
     InputAction _actionMove;
     InputAction _actionJump;
@@ -67,17 +66,18 @@ public class Klunk : MonoBehaviour
 
     private void Awake()
     {
+        _currentState = KlunkState.None;
         _currentFuel = _maxFuel;
         _currentEnergy = _maxEnergy;
+        _fuelPerSecond = (float)_maxFuel / _fuelTimeDuration;
+        _rechargePerSecond = (float)_maxEnergy / _totalTimeToReloadFullEnergy;
+
         _frontAttack = GetComponentInChildren<FrontAttack>();
         _frontAttack.gameObject.SetActive(false);
         _frontAttack.OnTriggerEnterEvent += _frontAttackChecker_OnTriggerEnterEvent;
-        _fuelPerSecond = (float)_maxFuel / _fuelTimeDuration;
-        _rechargePerSecond = (float)_maxEnergy / _totalTimeToReloadFullEnergy;
-        _currentState = KlunkState.None;
         _characterController = GetComponent<CharacterController>();
         _frictionController = GetComponent<FrictionController>();
-        _capsuleCollider = GetComponent<CapsuleCollider>();
+
         var playerInput = GetComponent<PlayerInput>();
         _actionMove = playerInput.actions["Move"];
         _actionJump = playerInput.actions["Jump"];
