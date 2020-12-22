@@ -61,8 +61,10 @@ MonoBehaviour:
   _hookFuelCostPerSecond: 20
   _hookMaxDistance: 10
   _minDistanceFromHookPoint: 2
+  _maxnDistanceFromHookPoint: 0.85
   _stringForce: 100
   _damp: 20
+  _springTolerance: 0.025
   _hookLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -95,12 +97,12 @@ MonoBehaviour:
     m_Bits: 256
   _debbugColorGround: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   _xOffsetSide: 0.99
-  _yOffsetSide: 0.7
+  _yOffsetSide: 0.99
   _zOffsetSide: 0.99
   _maxDistanceSideHit: 0.05
-  _SideLayerMask:
+  _canGoBesidesLayerMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 257
   _debbugColorSide: {r: 0, g: 0, b: 1, a: 1}
   _baseSpeed: 15
   _jumpHeight: 6

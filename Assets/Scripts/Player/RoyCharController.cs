@@ -23,7 +23,7 @@ public class RoyCharController : MonoBehaviour
     [SerializeField] float _yOffsetSide = .99f;
     [SerializeField] float _zOffsetSide = .99f;
     [SerializeField] float _maxDistanceSideHit = .05f;
-    [SerializeField] LayerMask _SideLayerMask = 1 << 8;
+    [SerializeField] LayerMask _canGoBesidesLayerMask = (1 << 0) + (1 << 8);
     [SerializeField] Color _debbugColorSide = Color.blue;
     RaycastHit _sideHitInfo;
     public bool HasWall { get; private set; }
@@ -43,6 +43,7 @@ public class RoyCharController : MonoBehaviour
     bool _ignoreSpeedSmooth;
     bool _ignoreAirSpeed;
     bool _dontIncrementSpeed;
+    bool _triggerHookInertia;
 
     public bool CanJump { get; set; } = true;
 
@@ -60,7 +61,7 @@ public class RoyCharController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_jump && IsGrounded() && CanJump)
+        if (_jump && IsGrounded() && CanJump && !_triggerHookInertia)
         {
             //_rb.AddForce(
             //        Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y),
@@ -70,11 +71,16 @@ public class RoyCharController : MonoBehaviour
             CanJump = false;
         }
 
-        if (_rb.velocity.y < 0)
+        if (_triggerHookInertia && IsGrounded())
+        {
+            _triggerHookInertia = false;
+        }
+
+        if (_rb.velocity.y < 0 && !_triggerHookInertia)
         {
             _rb.velocity += Vector3.up * Physics.gravity.y * (_fallMultiply - 1) * Time.fixedDeltaTime;
         }
-        else if (_rb.velocity.y > 0 && !_jump)
+        else if (_rb.velocity.y > 0 && !_jump && !_triggerHookInertia)
         {
             _rb.velocity += Vector3.up * Physics.gravity.y * (_lowJumpMultiply - 1) * Time.fixedDeltaTime;
         }
@@ -84,19 +90,24 @@ public class RoyCharController : MonoBehaviour
         {
             targetSpeed = new Vector3(Velocity.x, _rb.velocity.y);
         }
+        else if (_triggerHookInertia)
+        {
+            targetSpeed = _rb.velocity;
+            targetSpeed.x = Mathf.Clamp(Velocity.x + targetSpeed.x, -_baseSpeed, _baseSpeed);
+        }
         else
         {
-            int multi = 1;
-            if (HasWalls())
-                multi = 0;
+            int resetSpeedAgainstWalss = HasWalls() ? 0 : 1;
 
             if (!_dontIncrementSpeed)
             {
-                targetSpeed = new Vector3(_horizontalInertia * multi + (Velocity.x * multi), 0);
+                targetSpeed = new Vector3(_horizontalInertia *
+                    resetSpeedAgainstWalss + 
+                    (Velocity.x * resetSpeedAgainstWalss), 0);
             }
             else
             {
-                targetSpeed = new Vector3(Velocity.x * multi, 0);
+                targetSpeed = new Vector3(Velocity.x * resetSpeedAgainstWalss, 0);
             }
 
             if (!_ignoreHorizontalSpeedClamp)
@@ -105,6 +116,7 @@ public class RoyCharController : MonoBehaviour
             }
             targetSpeed.y = _rb.velocity.y;
         }
+
         _rb.velocity = targetSpeed;
 
         if (Velocity.x > 0)
@@ -167,6 +179,11 @@ public class RoyCharController : MonoBehaviour
         _dontIncrementSpeed = value;
     }
 
+    public void TriggerHookInertia()
+    {
+        _triggerHookInertia = true;
+    }
+
     bool IsGrounded()
     {
         Vector3 _vectorOffset = new Vector3(_mainCollider.bounds.size.x * _xOffsetGround,
@@ -206,7 +223,7 @@ public class RoyCharController : MonoBehaviour
             out _sideHitInfo,
             transform.rotation,
             _maxDistanceSideHit,
-            _SideLayerMask);
+            _canGoBesidesLayerMask);
 
         return HasWall;
     }

@@ -108,15 +108,15 @@ public class Roy : MonoBehaviour
         _actionMov2.canceled += _actionMov2_canceled;
     }
 
+    private void _actionJump_performed(InputAction.CallbackContext obj)
+    {
+        _jump = true;
+    }
+
     private void _actionJump_canceled(InputAction.CallbackContext obj)
     {
         _jump = false;
         _characterController.CanJump = true;
-    }
-
-    private void _actionJump_performed(InputAction.CallbackContext obj)
-    {
-        _jump = true;
     }
 
     private void _actionMov2_canceled(InputAction.CallbackContext obj)
@@ -186,7 +186,6 @@ public class Roy : MonoBehaviour
         switch (_currentState)
         {
             case RoyStates.Hooked:
-                //_rb.MovePosition(_rb.position + moveInput3 * (_speed * .1f) * Time.fixedDeltaTime);
                 if (_currentFuel <= 0 || !_actionMovHookPressed)
                 {
                     _currentState = RoyStates.None;
@@ -221,6 +220,7 @@ public class Roy : MonoBehaviour
                     && _currentFuel >= _hookFuelCostPerSecond
                     && HasHookPoint())
                 {
+                    _characterController.TriggerHookInertia();
                     _currentState = RoyStates.Hooked;
                     HookTo(_aimHitInfo.point);
                     return;
@@ -263,9 +263,9 @@ public class Roy : MonoBehaviour
         _sprJoint.autoConfigureConnectedAnchor = false;
         _sprJoint.enablePreprocessing = false;
         _sprJoint.minDistance = _minDistanceFromHookPoint;
-        _sprJoint.maxDistance = 
+        _sprJoint.maxDistance =
             Mathf.Clamp(_aimHitInfo.distance / 2, _minDistanceFromHookPoint, _hookMaxDistance);
-        _sprJoint.anchor = _mainCollider.bounds.center;
+        _sprJoint.anchor = new Vector3(0, .5f, 0);
         _sprJoint.connectedAnchor = hookPoint;
         _sprJoint.spring = _sprJoint.massScale = _stringForce;
         _sprJoint.damper = _damp;
