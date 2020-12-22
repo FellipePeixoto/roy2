@@ -41,11 +41,11 @@ GameObject:
   - component: {fileID: 4828082284466744315}
   - component: {fileID: 4828082284466744312}
   - component: {fileID: 4828082284466744308}
+  - component: {fileID: 2689992939945994152}
   - component: {fileID: 4828082284466744313}
   - component: {fileID: 4828082284466744310}
   - component: {fileID: 4828082284466744309}
   - component: {fileID: 5125189867493480807}
-  - component: {fileID: 2689992939945994152}
   m_Layer: 0
   m_Name: Set_KLUNK
   m_TagString: Untagged
@@ -86,7 +86,7 @@ MonoBehaviour:
   _xOffsetGround: 0.99
   _yOffsetGround: 0.99
   _zOffsetGround: 0.99
-  _maxDistanceGroundHit: 0.05
+  _maxDistanceGroundHit: 0.6
   _groundLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -102,6 +102,8 @@ MonoBehaviour:
   _baseSpeed: 15
   _jumpHeight: 6
   _airSpeedFactor: 0.65
+  _fallMultiply: 2.5
+  _lowJumpMultiply: 2
 --- !u!114 &4828082284466744308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,11 +120,37 @@ MonoBehaviour:
   _maxFuel: 100
   _maxEnergy: 100
   _fuelTimeDuration: 600
+  _totalTimeToReloadFullEnergy: 120
   _dashEnergyCost: 20
   _dashMaxDistance: 10
   _dashSpeedFactor: 6
   _sk8erBoiEnergyCostPerSecond: 10
   _sk8SpeedFactor: 3
+--- !u!114 &2689992939945994152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4828082284466744314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21c85c8d96485ad469dc14f5d489ec8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainCollider: {fileID: 4828082284466744309}
+  _pickRadius: 2
+  _collectMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  _debbugCastColor: {r: 0, g: 1, b: 0, a: 1}
+  _dropPositionOffset: {x: 1.2, y: 1, z: 1}
+  _dropMask:
+    serializedVersion: 2
+    m_Bits: 257
+  _debbugDropTrashColor: {r: 0, g: 1, b: 1, a: 1}
+  _batteryPrefab: {fileID: 413353679644928126, guid: 114b6dadf8b3f3940a46ffd49868718a,
+    type: 3}
 --- !u!54 &4828082284466744313
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -246,25 +274,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _softFric: {fileID: 13400000, guid: e05b1438de1ce5d4ca9bdaf2fbfc368f, type: 2}
   _hardFric: {fileID: 13400000, guid: 868608b94e6e0334994e177da4ca99bd, type: 2}
---- !u!114 &2689992939945994152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4828082284466744314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21c85c8d96485ad469dc14f5d489ec8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mainCollider: {fileID: 4828082284466744309}
-  _radiusOffset: 1
-  _maxDistanceHit: 2
-  _castLayerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  _debbugCastColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &4828082284540568221
 GameObject:
   m_ObjectHideFlags: 0
