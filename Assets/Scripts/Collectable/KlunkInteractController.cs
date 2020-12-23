@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public delegate void PickOrDropHandler(float time);
+
 public class KlunkInteractController : MonoBehaviour
 {
     [SerializeField] Collider _mainCollider;
@@ -12,12 +14,15 @@ public class KlunkInteractController : MonoBehaviour
     [SerializeField] float _pickRadius = 2;
     [SerializeField] LayerMask _collectMask = 1 << 10;
     [SerializeField] Color _debbugCastColor = Color.green;
-    [SerializeField] Vector3 _dropPositionOffset = (Vector3.right * .2f) + Vector3.one;
+    [SerializeField] Vector3 _dropPositionOffset = (Vector3.right * .45f) + Vector3.one;
     [SerializeField] LayerMask _dropMask = (1 << 0) + (1 << 8);
     [SerializeField] Color _debbugDropTrashColor = Color.cyan;
     [Space]
 
     [SerializeField] GameObject _batteryPrefab;
+
+    public event PickOrDropHandler OnPickStart;
+    public event PickOrDropHandler OnDropStart;
 
     public Trash CurrentTrash { get; private set; }
 
@@ -45,6 +50,7 @@ public class KlunkInteractController : MonoBehaviour
         {
             CurrentTrash.DestroyTrash();
             CurrentTrash = null;
+            _currentDebbugColorTrash = Color.clear;
             Instantiate(_batteryPrefab,
                 transform.position + transform.up * (transform.localScale.y),
                 Quaternion.identity);
@@ -58,12 +64,9 @@ public class KlunkInteractController : MonoBehaviour
 
         if (CurrentTrash != null && CanDropTrash(_trashSize))
         {
-            _currentDebbugColorTrash = Color.clear;
-            Vector3 offset = new Vector3(transform.right.x * _dropPositionOffset.x, transform.right.y * _dropPositionOffset.y);
-            CurrentTrash.DropTrash(_mainCollider.bounds.center + offset);
-            CurrentTrash = null;
             _klunk.LockActions(true);
-            StartCoroutine(TimeToPickOrDropTrash());
+            OnDropStart?.Invoke(_timeToPickOrDrop);
+            StartCoroutine(TimeToDropTrash());
             return;
         }
 
@@ -77,6 +80,7 @@ public class KlunkInteractController : MonoBehaviour
             CurrentTrash = trash;
             _currentDebbugColorTrash = _debbugDropTrashColor;
             _klunk.LockActions(true);
+            OnPickStart?.Invoke(_timeToPickOrDrop);
             StartCoroutine(TimeToPickOrDropTrash());
         }
     }
@@ -84,6 +88,16 @@ public class KlunkInteractController : MonoBehaviour
     IEnumerator TimeToPickOrDropTrash()
     {
         yield return new WaitForSeconds(_timeToPickOrDrop);
+        _klunk.LockActions(false);
+    }
+
+    IEnumerator TimeToDropTrash()
+    {
+        yield return new WaitForSeconds(_timeToPickOrDrop);
+        _currentDebbugColorTrash = Color.clear;
+        Vector3 offset = new Vector3(transform.right.x * _dropPositionOffset.x, transform.right.y * _dropPositionOffset.y);
+        CurrentTrash.DropTrash(_mainCollider.bounds.center + offset);
+        CurrentTrash = null;
         _klunk.LockActions(false);
     }
 

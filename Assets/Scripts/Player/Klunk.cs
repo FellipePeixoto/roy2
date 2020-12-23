@@ -241,6 +241,10 @@ public class Klunk : MonoBehaviour
     public void LockActions(bool value)
     {
         ActionsLocked = value;
+        if (value)
+        {
+            _characterController.Move(0, 1, false);
+        }
     }
 
     private void OnGUI()

@@ -15,7 +15,11 @@ public class KlunkGameFeel : MonoBehaviour
     [Tooltip("EM SEGUNDOS")]
     [SerializeField] float timerToDestroyTrails = 2;
 
+    [Space]
+    [SerializeField] GameObject _boxPickUp;
+
     Klunk _klunk;
+    KlunkInteractController _klunkInteractController;
     GameObject[] _trailsObjects;
     bool _dashing;
 
@@ -27,10 +31,36 @@ public class KlunkGameFeel : MonoBehaviour
     private void Awake()
     {
         _klunk = GetComponent<Klunk>();
+        _klunkInteractController = GetComponent<KlunkInteractController>();
+
         _klunk.OnStartDash += _klunk_OnStartDash;
         _klunk.OnEndDash += _klunk_OnEndDash;
         _klunk.OnStartSkate += _klunk_OnStartSkate;
         _klunk.OnEndSkate += _klunk_OnEndSkate;
+        _klunkInteractController.OnPickStart += _klunkInteractController_OnPickStart;
+        _klunkInteractController.OnDropStart += _klunkInteractController_OnPDropStart;
+    }
+
+    private void _klunkInteractController_OnPDropStart(float time)
+    {
+        if (_boxPickUp != null)
+        {
+            _boxPickUp.SetActive(true);
+            LeanTween.scale(_boxPickUp, Vector3.one, time)
+                .setEaseInExpo()
+                .setOnComplete(() => { _boxPickUp.SetActive(false);  });
+        }
+    }
+
+    private void _klunkInteractController_OnPickStart(float time)
+    {
+        if (_boxPickUp != null)
+        {
+            _boxPickUp.SetActive(true);
+            LeanTween.scale(_boxPickUp, Vector3.one * .1f, time)
+                .setEaseOutExpo()
+                .setOnComplete(() => { _boxPickUp.SetActive(false); });
+        }
     }
 
     private void _klunk_OnStartSkate(Vector3 startPoint)
@@ -65,8 +95,7 @@ public class KlunkGameFeel : MonoBehaviour
             Destroy(g.gameObject, timerToDestroyTrails);
         }
     }
-
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         if (!_dashing)
             return;
@@ -84,5 +113,7 @@ public class KlunkGameFeel : MonoBehaviour
         _klunk.OnEndDash -= _klunk_OnEndDash;
         _klunk.OnStartSkate -= _klunk_OnStartSkate;
         _klunk.OnEndSkate -= _klunk_OnEndSkate;
+        _klunkInteractController.OnPickStart -= _klunkInteractController_OnPickStart;
+        _klunkInteractController.OnDropStart -= _klunkInteractController_OnPDropStart;
     }
 }
