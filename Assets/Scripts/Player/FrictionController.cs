@@ -4,32 +4,55 @@ using UnityEngine;
 
 public class FrictionController : MonoBehaviour
 {
+    [SerializeField] PhysicMaterial _softFric;
     [SerializeField] PhysicMaterial _hardFric;
+
+    Collider[] _cols;
 
     float _defaultStaticFric;
     float _defaultDynamicFric;
 
     private void Awake()
     {
-        _defaultDynamicFric = _hardFric.dynamicFriction;
-        _defaultStaticFric = _hardFric.staticFriction;
+        _cols = GetComponentsInChildren<Collider>();
+        foreach (Collider col in _cols)
+        {
+            col.material = _hardFric;
+        }
+    }
+
+    void SetFric(PhysicMaterial target)
+    {
+        foreach (Collider col in _cols)
+        {
+            col.material = target;
+        }
+    }
+
+    public void SetZeroFriction()
+    {
+        SetFric(_softFric);
+    }
+
+    public void SetMaxFriction()
+    {
+        SetFric(_hardFric);
     }
 
     public void OnZeroFriction()
     {
-        _hardFric.dynamicFriction = 0;
-        _hardFric.staticFriction = 0;
+        //_hardFric.dynamicFriction = 0;
+        //_hardFric.staticFriction = 0;
     }
 
     public void OnRestoreFriction()
     {
-        _hardFric.dynamicFriction = _defaultDynamicFric;
-        _hardFric.staticFriction = _defaultStaticFric;
+        //_hardFric.dynamicFriction = _defaultDynamicFric;
+        //_hardFric.staticFriction = _defaultStaticFric;
     }
 
     private void OnDisable()
     {
-        _hardFric.dynamicFriction = _defaultDynamicFric;
-        _hardFric.staticFriction = _defaultStaticFric;
+        SetFric(_hardFric);
     }
 }
