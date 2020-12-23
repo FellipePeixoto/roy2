@@ -43,7 +43,7 @@ public class RoyCharController : MonoBehaviour
     bool _ignoreSpeedSmooth;
     bool _ignoreAirSpeed;
     bool _dontIncrementSpeed;
-    bool _triggerHookInertia;
+    bool _hookEnabled;
 
     public bool CanJump { get; set; } = true;
 
@@ -61,87 +61,65 @@ public class RoyCharController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_jump && IsGrounded() && CanJump && !_triggerHookInertia)
+        if (_jump && IsGrounded() && CanJump && !_hookEnabled)
         {
-            //_rb.AddForce(
-            //        Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y),
-            //        ForceMode.VelocityChange);
             _horizontalInertia = _rb.velocity.x;
             _rb.velocity += Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y);
             CanJump = false;
         }
 
-        if (_triggerHookInertia && IsGrounded())
-        {
-            _triggerHookInertia = false;
-        }
+        //if (_hookEnabled && _rb.velocity.y <= 0)
+        //{
+        //    _hookEnabled = false;
+        //}
 
-        if (_rb.velocity.y < 0 && !_triggerHookInertia)
+        if (_rb.velocity.y < 0 && !_hookEnabled)
         {
             _rb.velocity += Vector3.up * Physics.gravity.y * (_fallMultiply - 1) * Time.fixedDeltaTime;
         }
-        else if (_rb.velocity.y > 0 && !_jump && !_triggerHookInertia)
+        else if (_rb.velocity.y > 0 && !_jump && !_hookEnabled)
         {
             _rb.velocity += Vector3.up * Physics.gravity.y * (_lowJumpMultiply - 1) * Time.fixedDeltaTime;
         }
 
         Vector3 targetSpeed;
-        if (IsGrounded())
-        {
-            targetSpeed = new Vector3(Velocity.x, _rb.velocity.y);
-        }
-        else if (_triggerHookInertia)
-        {
-            targetSpeed = _rb.velocity;
-            targetSpeed.x = Mathf.Clamp(Velocity.x + targetSpeed.x, -_baseSpeed, _baseSpeed);
-        }
-        else
+
+        if (!_hookEnabled)
         {
             int resetSpeedAgainstWalss = HasWalls() ? 0 : 1;
 
-            if (!_dontIncrementSpeed)
-            {
-                targetSpeed = new Vector3(_horizontalInertia *
-                    resetSpeedAgainstWalss + 
-                    (Velocity.x * resetSpeedAgainstWalss), 0);
-            }
-            else
-            {
-                targetSpeed = new Vector3(Velocity.x * resetSpeedAgainstWalss, 0);
-            }
-
-            if (!_ignoreHorizontalSpeedClamp)
-            {
-                targetSpeed = Vector3.ClampMagnitude(targetSpeed, _baseSpeed * _baseSpeedMultiplier);
-            }
+            targetSpeed = new Vector3(Velocity.x * resetSpeedAgainstWalss, 0);
             targetSpeed.y = _rb.velocity.y;
-        }
 
-        _rb.velocity = targetSpeed;
+            _rb.velocity = targetSpeed;
 
-        if (Velocity.x > 0)
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-            FacedRight = true;
+            if (Velocity.x > 0)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                FacedRight = true;
+            }
+            else if (Velocity.x < 0)
+            {
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+                FacedRight = false;
+            }
         }
-        else if (Velocity.x < 0)
+        else if (Velocity.x != 0)
         {
-            transform.rotation = Quaternion.Euler(0, 180, 0);
-            FacedRight = false;
+            targetSpeed = new Vector3(Velocity.x, _rb.velocity.y);
+            _rb.velocity = targetSpeed;
         }
     }
 
-    public void Move(float dir, float speedFactor, bool jump)
+    public void Move(Vector2 dir, float speedFactor, bool jump)
     {
-        if (IsGrounded() || _ignoreAirSpeed)
-        {
-            Velocity = Vector3.Lerp(new Vector3(dir, 0), new Vector3(dir * (_baseSpeed * speedFactor), 0), Mathf.Abs(dir));
-            //Velocity.x = dir * (_baseSpeed * speedFactor);
-        }
-        else
-        {
-            Velocity.x = dir * (_baseSpeed * _airSpeedFactor);
-        }
+        if (dir.x > 0)
+            dir.x = 1;
+        else if (dir.x < 0)
+            dir.x = -1;
+
+        Velocity.x = dir.x * (_baseSpeed * speedFactor);
+
         _jump = jump;
     }
 
@@ -179,9 +157,9 @@ public class RoyCharController : MonoBehaviour
         _dontIncrementSpeed = value;
     }
 
-    public void TriggerHookInertia()
+    public void SetHook(bool value)
     {
-        _triggerHookInertia = true;
+        _hookEnabled = value;
     }
 
     bool IsGrounded()

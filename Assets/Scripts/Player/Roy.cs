@@ -190,6 +190,7 @@ public class Roy : MonoBehaviour
                 {
                     _currentState = RoyStates.None;
                     UnHook();
+                    _characterController.SetHook(false);
                     return;
                 }
                 _fuelConsumed += _hookFuelCostPerSecond * Time.fixedDeltaTime;
@@ -198,7 +199,7 @@ public class Roy : MonoBehaviour
                     _fuelConsumed -= 1;
                     _currentFuel = Mathf.Clamp(--_currentFuel, 0, _maxFuel);
                 }
-                _characterController.Move(_actionMove.ReadValue<Vector2>().x, 1, false);
+                _characterController.Move(_actionMove.ReadValue<Vector2>(), 1, false);
                 break;
 
             case RoyStates.Boosting:
@@ -215,12 +216,12 @@ public class Roy : MonoBehaviour
                 break;
 
             default:
-                _characterController.Move(_actionMove.ReadValue<Vector2>().normalized.x, 1f, _jump);
+                _characterController.Move(_actionMove.ReadValue<Vector2>(), 1f, _jump);
                 if (_actionMovHookPressed
                     && _currentFuel >= _hookFuelCostPerSecond
                     && HasHookPoint())
                 {
-                    _characterController.TriggerHookInertia();
+                    _characterController.SetHook(true);
                     _currentState = RoyStates.Hooked;
                     HookTo(_aimHitInfo.point);
                     return;
@@ -232,6 +233,12 @@ public class Roy : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    private void LateUpdate()
+    {
+        if (_currentState == RoyStates.Hooked)
+            _hookLine.SetPosition(0, _mainCollider.bounds.center);
     }
 
     bool HasHookPoint()
@@ -269,10 +276,14 @@ public class Roy : MonoBehaviour
         _sprJoint.connectedAnchor = hookPoint;
         _sprJoint.spring = _sprJoint.massScale = _stringForce;
         _sprJoint.damper = _damp;
+        _hookLine.enabled = true;
+        _hookLine.SetPositions(new Vector3[2]);
+        _hookLine.SetPosition(1, hookPoint);
     }
 
     void UnHook()
     {
+        _hookLine.enabled = false;
         Destroy(_sprJoint);
     }
 
