@@ -55,11 +55,15 @@ public class Klunk : MonoBehaviour
     CharacterController _characterController;
     FrictionController _frictionController;
 
-    InputAction _actionMove;
-    InputAction _actionJump;
-    InputAction _actionMov2;
-    InputAction _actionMov1;
-    InputAction _actionOpenMap;
+    public bool ActionsLocked { get; private set; }
+
+    public InputAction ActionMove { get; private set; }
+    public InputAction ActionJump { get; private set; }
+    public InputAction ActionInteract { get; private set; }
+    public InputAction ActionSupport { get; private set; }
+    public InputAction ActionMovSkate { get; private set; }
+    public InputAction ActionMovDash { get; private set; }
+    public InputAction ActionOpenMap { get; private set; }
 
     int _currentFuel;
     int _currentEnergy;
@@ -72,7 +76,7 @@ public class Klunk : MonoBehaviour
     float _energyRecharged;
     bool _actionMov2Pressed;
     bool _hitWallWhileDash;
-    bool _jump;
+    bool _jump; 
 
     Vector3 delete_start;
 
@@ -91,14 +95,17 @@ public class Klunk : MonoBehaviour
         _frictionController = GetComponent<FrictionController>();
 
         var playerInput = GetComponent<PlayerInput>();
-        _actionMove = playerInput.actions["Move"];
-        _actionJump = playerInput.actions["Jump"];
-        _actionJump.performed += _actionJump_performed;
-        _actionJump.canceled += _actionJump_canceled;
-        _actionMov1 = playerInput.actions["Mov1"];
-        _actionMov2 = playerInput.actions["Mov2"];
-        _actionMov2.performed += _actionMov2_performed;
-        _actionMov2.canceled += _actionMov2_canceled;
+        ActionMove = playerInput.actions["Move"];
+        ActionJump = playerInput.actions["Jump"];
+        ActionJump.performed += _actionJump_performed;
+        ActionJump.canceled += _actionJump_canceled;
+        ActionInteract = playerInput.actions["Interaction"];
+        ActionSupport = playerInput.actions["Support"];
+        ActionMovDash = playerInput.actions["Mov1"];
+        ActionMovSkate = playerInput.actions["Mov2"];
+        ActionOpenMap = playerInput.actions["OpenMap"];
+        ActionMovSkate.performed += _actionMov2_performed;
+        ActionMovSkate.canceled += _actionMov2_canceled;
     }
 
     private void _actionJump_performed(InputAction.CallbackContext obj)
@@ -158,6 +165,9 @@ public class Klunk : MonoBehaviour
             _currentEnergy = Mathf.Clamp(++_currentEnergy, 0, _maxEnergy);
         }
 
+        if (ActionsLocked)
+            return;
+
         switch (_currentState)
         {
             case KlunkState.Dashing:
@@ -185,8 +195,8 @@ public class Klunk : MonoBehaviour
                     OnEndSkate?.Invoke(transform.position);
                     return;
                 }
-                _characterController.Move(_actionMove.ReadValue<Vector2>().x, 
-                    Mathf.Abs(_actionMove.ReadValue<Vector2>().x) * _sk8SpeedFactor, _jump);
+                _characterController.Move(ActionMove.ReadValue<Vector2>().x, 
+                    Mathf.Abs(ActionMove.ReadValue<Vector2>().x) * _sk8SpeedFactor, _jump);
                 _energyConsumed += _sk8erBoiEnergyCostPerSecond * Time.fixedDeltaTime;
                 if (_energyConsumed >= 1)
                 {
@@ -195,8 +205,8 @@ public class Klunk : MonoBehaviour
                 }
                 break;
             default:
-                _characterController.Move(_actionMove.ReadValue<Vector2>().x, Mathf.Abs(_actionMove.ReadValue<Vector2>().x), _jump);
-                if (_actionMov1.triggered && _currentEnergy >= _dashEnergyCost)
+                _characterController.Move(ActionMove.ReadValue<Vector2>().x, Mathf.Abs(ActionMove.ReadValue<Vector2>().x), _jump);
+                if (ActionMovDash.triggered && _currentEnergy >= _dashEnergyCost)
                 {
                     _characterController.IgnoreAirSpeed(true);
                     if (_characterController.FacedRight)
@@ -226,6 +236,11 @@ public class Klunk : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void LockActions(bool value)
+    {
+        ActionsLocked = value;
     }
 
     private void OnGUI()

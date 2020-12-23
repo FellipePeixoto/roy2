@@ -142,6 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainCollider: {fileID: 4828082284466744309}
+  _timeToPickOrDrop: 0.35
   _pickRadius: 2
   _collectMask:
     serializedVersion: 2
