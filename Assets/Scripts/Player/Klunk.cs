@@ -34,13 +34,13 @@ public class Klunk : MonoBehaviour
     [Tooltip("In Seconds")]
     [SerializeField] int _fuelTimeDuration = 600;
     [Tooltip("In Seconds")]
-    [SerializeField] int _totalTimeToReloadFullEnergy = 120;
+    [SerializeField] int _totalTimeToReloadFullEnergy = 240;
 
     [Space]
     [Header("Investida com escudo")]
     [Tooltip("investida com seu escudo energizado")]
     [SerializeField] int _dashEnergyCost = 20;
-    [SerializeField] float _dashMaxDistance = 10;
+    [SerializeField] float _dashMaxDistance = 18;
     [Tooltip("Quantas vezes o dash é maior em relação a velocidade normal")]
     [SerializeField] float _dashSpeedFactor = 2;
 
@@ -74,7 +74,7 @@ public class Klunk : MonoBehaviour
     bool _hitWallWhileDash;
     bool _jump;
 
-    Vector3 delete_start;
+    Vector2 temp_startPosition;
 
     private void Awake()
     {
@@ -161,11 +161,12 @@ public class Klunk : MonoBehaviour
         switch (_currentState)
         {
             case KlunkState.Dashing:
+                _remainingTimeDash -= Time.fixedDeltaTime;
                 if (_remainingTimeDash <= 0 || _hitWallWhileDash)
                 {
                     _currentState = KlunkState.None;
                     _characterController.IgnoreAirSpeed(false);
-                    _characterController.Move(0, 0, _jump);
+                    _characterController.Move(Vector2.zero, 0, _jump);
                     _characterController.RemoveFreezeConstraint(RigidbodyConstraints.FreezePositionY);
                     _frontAttack.gameObject.SetActive(false);
                     _hitWallWhileDash = false;
@@ -174,8 +175,8 @@ public class Klunk : MonoBehaviour
                     _characterController.IgnoreSpeedSmooth(false);
                     _characterController.DontIncrementSpeed(false);
                     OnEndDash?.Invoke(transform.position);
+                    Debug.Log(Vector3.Distance(temp_startPosition, transform.position));
                 }
-                _remainingTimeDash -= Time.fixedDeltaTime;
                 break;
             case KlunkState.Sk8erBoi:
                 if (_currentEnergy <= 0 || !_actionMov2Pressed)
@@ -185,8 +186,7 @@ public class Klunk : MonoBehaviour
                     OnEndSkate?.Invoke(transform.position);
                     return;
                 }
-                _characterController.Move(_actionMove.ReadValue<Vector2>().x, 
-                    Mathf.Abs(_actionMove.ReadValue<Vector2>().x) * _sk8SpeedFactor, _jump);
+                _characterController.Move(_actionMove.ReadValue<Vector2>(), _sk8SpeedFactor, _jump);
                 _energyConsumed += _sk8erBoiEnergyCostPerSecond * Time.fixedDeltaTime;
                 if (_energyConsumed >= 1)
                 {
@@ -195,14 +195,14 @@ public class Klunk : MonoBehaviour
                 }
                 break;
             default:
-                _characterController.Move(_actionMove.ReadValue<Vector2>().x, Mathf.Abs(_actionMove.ReadValue<Vector2>().x), _jump);
+                _characterController.Move(_actionMove.ReadValue<Vector2>(), 1, _jump);
                 if (_actionMov1.triggered && _currentEnergy >= _dashEnergyCost)
                 {
                     _characterController.IgnoreAirSpeed(true);
                     if (_characterController.FacedRight)
-                        _characterController.Move(1, _dashSpeedFactor, _jump);
+                        _characterController.Move(Vector2.right, _dashSpeedFactor, _jump);
                     else
-                        _characterController.Move(-1, _dashSpeedFactor, _jump);
+                        _characterController.Move(-Vector2.right, _dashSpeedFactor, _jump);
                     _characterController.AddFreezeConstraint(RigidbodyConstraints.FreezePositionY);
                     _frontAttack.gameObject.SetActive(true);
                     _remainingTimeDash = _dashMaxDistance / (_characterController.BaseSpeed * _dashSpeedFactor);
@@ -213,11 +213,11 @@ public class Klunk : MonoBehaviour
                     _characterController.IgnoreHorizontalClampedSpeed(true);
                     _characterController.IgnoreSpeedSmooth(true);
                     _characterController.DontIncrementSpeed(true);
-                    delete_start = transform.position;
                     OnStartDash?.Invoke(transform.position);
+                    temp_startPosition = transform.position;
                     return;
                 }
-                else if (_actionMov2Pressed && _currentEnergy > 0)
+                else if (_actionMov2Pressed && _currentEnergy > _sk8erBoiEnergyCostPerSecond)
                 {
                     _currentState = KlunkState.Sk8erBoi;
                     _characterController.SetBaseSpeedMultiplier(_sk8SpeedFactor);

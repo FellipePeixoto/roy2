@@ -32,7 +32,6 @@ public class CharacterController : MonoBehaviour
 
     [SerializeField] float _baseSpeed = 15;
     [SerializeField] float _jumpHeight = 6;
-    [SerializeField] float _airSpeedFactor = .65f;
     [SerializeField] float _fallMultiply = 2.5f;
     [SerializeField] float _lowJumpMultiply = 2f;
     Vector3 Velocity;
@@ -63,9 +62,6 @@ public class CharacterController : MonoBehaviour
     {
         if (_jump && IsGrounded() && CanJump)
         {
-            //_rb.AddForce(
-            //        Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y),
-            //        ForceMode.VelocityChange);
             _horizontalInertia = _rb.velocity.x;
             _rb.velocity += Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y);
             CanJump = false;
@@ -81,31 +77,11 @@ public class CharacterController : MonoBehaviour
         }
 
         Vector3 targetSpeed;
-        if (IsGrounded())
-        {
-            targetSpeed = new Vector3(Velocity.x, _rb.velocity.y);
-        }
-        else
-        {
-            int multi = 1;
-            if (HasWalls())
-                multi = 0;
+        int resetSpeedAgainstWalss = HasWalls() ? 0 : 1;
 
-            if (!_dontIncrementSpeed)
-            {
-                targetSpeed = new Vector3(_horizontalInertia * multi + (Velocity.x * multi), 0);
-            }
-            else
-            {
-                targetSpeed = new Vector3(Velocity.x * multi, 0);
-            }
+        targetSpeed = new Vector3(Velocity.x * resetSpeedAgainstWalss, 0);
+        targetSpeed.y = _rb.velocity.y;
 
-            if (!_ignoreHorizontalSpeedClamp)
-            {
-                targetSpeed = Vector3.ClampMagnitude(targetSpeed, _baseSpeed * _baseSpeedMultiplier);
-            }
-            targetSpeed.y = _rb.velocity.y;
-        }
         _rb.velocity = targetSpeed;
 
         if (Velocity.x > 0)
@@ -120,17 +96,16 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    public void Move(float dir, float speedFactor, bool jump)
+    public void Move(Vector2 dir, float speedFactor, bool jump)
     {
-        if (IsGrounded() || _ignoreAirSpeed)
-        {
-            Velocity = Vector3.Lerp(new Vector3(dir, 0), new Vector3(dir * (_baseSpeed * speedFactor), 0), Mathf.Abs(dir));
-            //Velocity.x = dir * (_baseSpeed * speedFactor);
-        }
-        else
-        {
-            Velocity.x = dir * (_baseSpeed * _airSpeedFactor);
-        }
+
+        if (dir.x > 0)
+            dir.x = 1;
+        else if (dir.x < 0)
+            dir.x = -1;
+
+        Velocity.x = dir.x * (_baseSpeed * speedFactor);
+        
         _jump = jump;
     }
 
