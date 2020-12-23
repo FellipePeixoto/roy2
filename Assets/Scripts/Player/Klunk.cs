@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public delegate void DashStartHandler(Vector3 startPoint);
+public delegate void DashEndHandler(Vector3 endPoint);
+
+public delegate void SkateStartHandler(Vector3 startPoint);
+public delegate void SkateEndHandler(Vector3 startPoint);
+
 enum KlunkState
 {
     None,
@@ -12,6 +18,12 @@ enum KlunkState
 
 public class Klunk : MonoBehaviour
 {
+    public event DashStartHandler OnStartDash;
+    public event DashStartHandler OnEndDash;
+
+    public event SkateStartHandler OnStartSkate;
+    public event SkateStartHandler OnEndSkate;
+
     [Tooltip("Combustível e energia infinitos")]
     [SerializeField] bool _infinityMode = false;
 
@@ -161,15 +173,16 @@ public class Klunk : MonoBehaviour
                     _characterController.IgnoreHorizontalClampedSpeed(false);
                     _characterController.IgnoreSpeedSmooth(false);
                     _characterController.DontIncrementSpeed(false);
-                    Debug.Log(Vector3.Distance(delete_start, transform.position));
+                    OnEndDash?.Invoke(transform.position);
                 }
                 _remainingTimeDash -= Time.fixedDeltaTime;
                 break;
             case KlunkState.Sk8erBoi:
-                if (_currentEnergy <= 0)
+                if (_currentEnergy <= 0 || !_actionMov2Pressed)
                 {
                     _currentState = KlunkState.None;
                     _characterController.SetBaseSpeedMultiplier(1);
+                    OnEndSkate?.Invoke(transform.position);
                     return;
                 }
                 _characterController.Move(_actionMove.ReadValue<Vector2>().x, 
@@ -179,11 +192,6 @@ public class Klunk : MonoBehaviour
                 {
                     _energyConsumed -= 1;
                     _currentEnergy = Mathf.Clamp(--_currentEnergy, 0, _maxEnergy);
-                }
-                if (!_actionMov2Pressed)
-                {
-                    _currentState = KlunkState.None;
-                    _characterController.SetBaseSpeedMultiplier(1);
                 }
                 break;
             default:
@@ -206,12 +214,14 @@ public class Klunk : MonoBehaviour
                     _characterController.IgnoreSpeedSmooth(true);
                     _characterController.DontIncrementSpeed(true);
                     delete_start = transform.position;
+                    OnStartDash?.Invoke(transform.position);
                     return;
                 }
                 else if (_actionMov2Pressed && _currentEnergy > 0)
                 {
                     _currentState = KlunkState.Sk8erBoi;
                     _characterController.SetBaseSpeedMultiplier(_sk8SpeedFactor);
+                    OnStartSkate?.Invoke(transform.position);
                     return;
                 }
                 break;
