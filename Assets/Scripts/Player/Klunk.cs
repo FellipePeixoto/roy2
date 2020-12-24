@@ -52,7 +52,7 @@ public class Klunk : MonoBehaviour
 
     KlunkState _currentState;
     FrontAttack _frontAttack;
-    CharacterController _characterController;
+    KlunkCharController _characterController;
     FrictionController _frictionController;
 
     InputAction _actionMove;
@@ -87,7 +87,7 @@ public class Klunk : MonoBehaviour
         _frontAttack = GetComponentInChildren<FrontAttack>();
         _frontAttack.gameObject.SetActive(false);
         _frontAttack.OnTriggerEnterEvent += _frontAttackChecker_OnTriggerEnterEvent;
-        _characterController = GetComponent<CharacterController>();
+        _characterController = GetComponent<KlunkCharController>();
         _frictionController = GetComponent<FrictionController>();
 
         var playerInput = GetComponent<PlayerInput>();

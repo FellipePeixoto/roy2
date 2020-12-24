@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MagnetableController : MonoBehaviour
+public class Magnetic : MonoBehaviour
 {
-    [SerializeField] bool _isActive;    
+    [SerializeField] bool _isActive;
+    [SerializeField] Rigidbody _rb;
 
-    Rigidbody _rb;
     bool IsActive { set => _isActive = value; }
 
-    private void Awake()
+    private void Reset()
     {
         _rb = GetComponent<Rigidbody>();
     }
@@ -25,7 +25,12 @@ public class MagnetableController : MonoBehaviour
         _rb.AddForce(CalcForce() * Time.fixedDeltaTime, ForceMode.VelocityChange);
     }
 
-    Vector3 GilbertForce(Magnetic magnetic)
+    public void GetAttracted(Vector3 force)
+    {
+
+    }
+
+    Vector3 GilbertForce(Magnet magnetic)
     {
         var dir = magnetic.transform.position - transform.position;
         var dist = Vector3.Distance(magnetic.transform.position, transform.position);
@@ -40,7 +45,7 @@ public class MagnetableController : MonoBehaviour
 
     Vector3 CalcForce()
     {
-        var magnetics = FindObjectsOfType<Magnetic>();
+        var magnetics = FindObjectsOfType<Magnet>();
 
         if (magnetics.Length < 1)
         {
@@ -61,7 +66,7 @@ public class MagnetableController : MonoBehaviour
 
         Vector3 resultantForce = Vector3.zero;
 
-        foreach (Magnetic m in notIgnored)
+        foreach (Magnet m in notIgnored)
         {
             if(!m.Repulsive)
                 resultantForce += GilbertForce(m);
