@@ -7,7 +7,7 @@ public class Magnet : MonoBehaviour
     [SerializeField] Collider _mainCollider;
     [Space]
 
-    [SerializeField] float _force = 16;
+    [SerializeField] float _force = 250;
     [SerializeField] bool _attractive = true;
 
     Dictionary<int, Magnetic> _magnetics = new Dictionary<int, Magnetic>();
