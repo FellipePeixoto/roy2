@@ -7,6 +7,7 @@ public class Magnetic : MonoBehaviour
 {
     [SerializeField] bool _isActive;
     [SerializeField] Rigidbody _rb;
+    public ForceMode currentForceMode;
 
     bool IsActive { set => _isActive = value; }
 
@@ -17,17 +18,29 @@ public class Magnetic : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_isActive)
-        {
-            return;
-        }
-
         _rb.AddForce(CalcForce() * Time.fixedDeltaTime, ForceMode.VelocityChange);
     }
 
     public void GetAttracted(Vector3 force)
     {
+        switch (currentForceMode)
+        {
+            case ForceMode.Acceleration:
+                _rb.AddForce(force, ForceMode.Acceleration);
+                break;
 
+            case ForceMode.VelocityChange:
+                _rb.AddForce(force, ForceMode.VelocityChange);
+                break;
+
+            case ForceMode.Impulse:
+                _rb.AddForce(force, ForceMode.Impulse);
+                break;
+
+            case ForceMode.Force:
+                _rb.AddForce(force, ForceMode.Force);
+                break;
+        }
     }
 
     Vector3 GilbertForce(Magnet magnetic)

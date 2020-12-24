@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Magnet : MonoBehaviour
 {
-    [SerializeField] float _force;
-    [SerializeField] bool _repulsive;
+    [SerializeField] Collider _mainCollider;
+    [Space]
+
+    [SerializeField] float _force = 16;
+    [SerializeField] bool _attractive = true;
 
     Dictionary<int, Magnetic> _magnetics = new Dictionary<int, Magnetic>();
 
@@ -13,7 +16,12 @@ public class Magnet : MonoBehaviour
     public bool Ignore { get => _ignore; }
 
     public float Force { get => _force; }
-    public bool Repulsive { get => _repulsive; }
+    public bool Repulsive { get => _attractive; }
+
+    private void Reset()
+    {
+        _mainCollider = GetComponent<Collider>();
+    }
 
     private void Awake()
     {
@@ -33,7 +41,12 @@ public class Magnet : MonoBehaviour
         if (!_magnetics.TryGetValue(instanceID, out current))
             return;
 
-        current.GetAttracted(Vector3.one);
+        Vector3 targetDir = (_mainCollider.bounds.center - current.transform.position).normalized;
+
+        if (_attractive)
+            current.GetAttracted(targetDir * _force);
+        else
+            current.GetAttracted(-targetDir * _force);
     }
 
     private void OnTriggerEnter(Collider other)
