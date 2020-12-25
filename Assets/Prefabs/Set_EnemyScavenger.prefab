@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 186861483898232250}
   - component: {fileID: 341099941985677396}
+  - component: {fileID: 1588635994698797752}
+  - component: {fileID: 890568683343777394}
   - component: {fileID: 6452159252895933755}
   - component: {fileID: 8843267118872120251}
-  - component: {fileID: 890568683343777394}
   m_Layer: 0
   m_Name: Set_EnemyScavenger
   m_TagString: Untagged
@@ -50,18 +51,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainCollider: {fileID: 8843267118872120251}
-  _rb: {fileID: 6452159252895933755}
   _magnet: {fileID: 890568683343777394}
   _halfExtends: {x: 8, y: 1.8, z: 2}
   _debbugMagnetZoneColor: {r: 1, g: 1, b: 1, a: 1}
   _whereIsMagnetics:
     serializedVersion: 2
     m_Bits: 1
-  _speed: 0
-  _minimumDistance: 0
-  _start: {fileID: 0}
-  _end: {fileID: 0}
-  stop: 0
+  _debbugForceStrong: {r: 1, g: 0, b: 0, a: 1.6}
+  _strongForceWidth: 0.35
+--- !u!114 &1588635994698797752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186861483898232251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fc08a2ae6e44824aae9eb14b75cfe5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rb: {fileID: 6452159252895933755}
+  _startPoint: {x: 0, y: 0, z: 0}
+  _mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  _startFromLeftToRight: 1
+  _speed: 12
+  _maxDistance: 14
+  _debbugMaxDistanceColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _debbug_scavagePosition: 0
+--- !u!114 &890568683343777394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186861483898232251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d28028ff1c4033c4e97cd46ffe46bf60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainCollider: {fileID: 8843267118872120251}
+  _force: 65
+  _attractive: 1
+  forceMode: 2
 --- !u!54 &6452159252895933755
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -91,21 +124,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.02, y: 4.02, z: 2.02}
   m_Center: {x: 0, y: 2, z: 0}
---- !u!114 &890568683343777394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186861483898232251}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d28028ff1c4033c4e97cd46ffe46bf60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mainCollider: {fileID: 8843267118872120251}
-  _force: 250
-  _attractive: 1
 --- !u!1 &186861484392307436
 GameObject:
   m_ObjectHideFlags: 0
