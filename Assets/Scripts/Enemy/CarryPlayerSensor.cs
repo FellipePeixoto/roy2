@@ -9,7 +9,7 @@ public class CarryPlayerSensor : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb != null && rb != carrier)
+        if (rb != null && rb != carrier._rigidbody)
         {
             carrier.Add(rb);
         }
@@ -18,9 +18,9 @@ public class CarryPlayerSensor : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb != null && rb != carrier)
+        if (rb != null && rb != carrier._rigidbody)
         {
-            carrier.Add(rb);
+            carrier.Remove(rb);
         }
     }
 }

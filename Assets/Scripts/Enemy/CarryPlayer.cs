@@ -6,6 +6,7 @@ public class CarryPlayer : MonoBehaviour
 {
     public bool useTriggerAsSensor = false;
     public List<Rigidbody> rigidbodies = new List<Rigidbody>();
+    public Rigidbody _rigidbody;
 
     Vector3 _lastPosition;
     Transform _transform;
@@ -14,6 +15,15 @@ public class CarryPlayer : MonoBehaviour
     {
         _transform = transform;
         _lastPosition = _transform.position;
+        _rigidbody = GetComponent<Rigidbody>();
+
+        if (useTriggerAsSensor)
+        {
+            foreach (CarryPlayerSensor sensor in GetComponentsInChildren<CarryPlayerSensor>())
+            {
+                sensor.carrier = this;
+            }
+        }      
     }
 
     private void LateUpdate()
