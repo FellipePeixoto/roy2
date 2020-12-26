@@ -11,9 +11,8 @@ public class ScavengeController : MonoBehaviour
     [SerializeField] Mesh _mesh;
     [Space]
 
-    [SerializeField] LeanTweenType _leanType = LeanTweenType.easeInOutQuad;
-    [SerializeField] bool _startFromLeftToRight = true;
-    [SerializeField] float _speed = 12;
+    [SerializeField] LeanTweenType _leanType = LeanTweenType.easeInOutSine;
+    [SerializeField] bool _startFromLeft = true;
     [SerializeField] float _maxDistance = 14;
     [SerializeField] Color _debbugMaxDistanceColor = Color.yellow + new Color(0, 0, 0, .35f);
     [Range(0, 1)] [SerializeField] float _debbug_scavagePosition;
@@ -27,31 +26,17 @@ public class ScavengeController : MonoBehaviour
         _startPoint = transform.position;
     }
 
-    private void Awake()
+    private void Start()
     {
-        if (!_startFromLeftToRight)
+        if (!_startFromLeft)
         {
-            _goingRight = !_goingRight;
-            transform.position =
-                new Vector3(_startPoint.x + _maxDistance,
-                _startPoint.y,
-                _startPoint.z);
-        }
-        else
-        {
-            transform.position = _startPoint;
+            _maxDistance = -_maxDistance;
+            transform.position += Vector3.right * _maxDistance;
         }
 
-        _timerToTurn = _maxDistance / _speed;
-
-
+        LeanTween.moveX(gameObject, transform.position.x + _maxDistance, _timerToTurn)
+            .setEase(_leanType).setLoopPingPong();
     }
-
-    //private void Start()
-    //{
-    //    LeanTween.moveX(gameObject, _maxDistance, _timerToTurn)
-    //        .setEase(_leanType).setLoopPingPong();
-    //}
 
 #if UNITY_EDITOR
     private void Update()
@@ -66,27 +51,12 @@ public class ScavengeController : MonoBehaviour
     }
 #endif
 
-    private void FixedUpdate()
-    {
-        
-        _timerToTurn -= Time.fixedDeltaTime;
-        if (_timerToTurn <= 0)
-        {
-            _goingRight = !_goingRight;
-            _timerToTurn = _maxDistance / _speed;
-            return;
-        }
-
-        float currentDirection = _goingRight ? 1 : -1;
-        _rb.MovePosition(_rb.position + (((currentDirection * Vector3.right) * 12) * Time.fixedDeltaTime));
-    }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = _debbugMaxDistanceColor;
         Vector3 center = Vector3.Lerp(_startPoint, _startPoint + Vector3.right * _maxDistance, .5f);
         Gizmos.DrawCube(center, Vector3.one + Vector3.right * _maxDistance);
-        if (_startFromLeftToRight)
+        if (_startFromLeft)
             Gizmos.DrawMesh(_mesh, _startPoint);
         else
             Gizmos.DrawMesh(_mesh, _startPoint + Vector3.right * _maxDistance);

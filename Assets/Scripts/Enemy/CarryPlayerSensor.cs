@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class CarryPlayerSensor : MonoBehaviour
 {
-    [HideInInspector] public CarryPlayer carrier;
+    public CarryPlayer carrier;
 
     private void OnTriggerEnter(Collider other)
     {
         Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb != null && rb != carrier._rigidbody)
+        if (rb != null && rb.gameObject != gameObject)
         {
             carrier.Add(rb);
         }
@@ -18,7 +18,7 @@ public class CarryPlayerSensor : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         Rigidbody rb = other.GetComponent<Rigidbody>();
-        if (rb != null && rb != carrier._rigidbody)
+        if (rb != null && rb.gameObject != gameObject)
         {
             carrier.Remove(rb);
         }

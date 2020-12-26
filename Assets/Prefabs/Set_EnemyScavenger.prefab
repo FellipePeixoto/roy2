@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 890568683343777394}
   - component: {fileID: 6452159252895933755}
   - component: {fileID: 8843267118872120251}
-  m_Layer: 0
+  - component: {fileID: 6894004095588992946}
+  m_Layer: 8
   m_Name: Set_EnemyScavenger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,6 +36,7 @@ Transform:
   - {fileID: 186861484392307439}
   - {fileID: 5938034536889428716}
   - {fileID: 5938034535867717343}
+  - {fileID: 6039269957855115016}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -57,8 +59,6 @@ MonoBehaviour:
   _whereIsMagnetics:
     serializedVersion: 2
     m_Bits: 1
-  _debbugForceStrong: {r: 1, g: 0, b: 0, a: 1.6}
-  _strongForceWidth: 0.35
 --- !u!114 &1588635994698797752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,11 +74,13 @@ MonoBehaviour:
   _rb: {fileID: 6452159252895933755}
   _startPoint: {x: 0, y: 0, z: 0}
   _mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  _leanType: 4
   _startFromLeftToRight: 1
   _speed: 12
   _maxDistance: 14
   _debbugMaxDistanceColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   _debbug_scavagePosition: 0
+  _timerToTurn: 2
 --- !u!114 &890568683343777394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,6 +126,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.02, y: 4.02, z: 2.02}
   m_Center: {x: 0, y: 2, z: 0}
+--- !u!114 &6894004095588992946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186861483898232251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71da11524cb3c064f8f71aac46cae82e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useTriggerAsSensor: 0
+  rigidbodies: []
+  _rigidbody: {fileID: 6452159252895933755}
 --- !u!1 &186861484392307436
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,7 +152,7 @@ GameObject:
   - component: {fileID: 186861484392307439}
   - component: {fileID: 186861484392307424}
   - component: {fileID: 186861484392307425}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: View_Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,6 +220,64 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &3241208478740687591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6039269957855115016}
+  - component: {fileID: 3926691768793278107}
+  - component: {fileID: 2586372260283312735}
+  m_Layer: 8
+  m_Name: Sensor_Plataform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6039269957855115016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3241208478740687591}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 186861483898232250}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3926691768793278107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3241208478740687591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6941a4cb9be6261408a6f7e4d9819abb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carrier: {fileID: 6894004095588992946}
+--- !u!65 &2586372260283312735
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3241208478740687591}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.031125, y: 0.6314516, z: 1}
+  m_Center: {x: 0, y: 3.9391108, z: 0}
 --- !u!1 &5938034535867717342
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,7 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5938034535867717343}
   - component: {fileID: 5938034535867717340}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: View_MagneticLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5938034536889428716}
   - component: {fileID: 5938034536889428717}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: View_MagneticRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
