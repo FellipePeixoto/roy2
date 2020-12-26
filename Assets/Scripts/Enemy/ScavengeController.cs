@@ -11,6 +11,7 @@ public class ScavengeController : MonoBehaviour
     [SerializeField] Mesh _mesh;
     [Space]
 
+    [SerializeField] LeanTweenType _leanType = LeanTweenType.easeInOutQuad;
     [SerializeField] bool _startFromLeftToRight = true;
     [SerializeField] float _speed = 12;
     [SerializeField] float _maxDistance = 14;
@@ -18,7 +19,7 @@ public class ScavengeController : MonoBehaviour
     [Range(0, 1)] [SerializeField] float _debbug_scavagePosition;
 
     bool _goingRight = true;
-    float _timerToTurn;
+    [SerializeField] float _timerToTurn = 2;
 
     private void Reset()
     {
@@ -31,7 +32,7 @@ public class ScavengeController : MonoBehaviour
         if (!_startFromLeftToRight)
         {
             _goingRight = !_goingRight;
-            transform.position = 
+            transform.position =
                 new Vector3(_startPoint.x + _maxDistance,
                 _startPoint.y,
                 _startPoint.z);
@@ -42,7 +43,15 @@ public class ScavengeController : MonoBehaviour
         }
 
         _timerToTurn = _maxDistance / _speed;
+
+
     }
+
+    //private void Start()
+    //{
+    //    LeanTween.moveX(gameObject, _maxDistance, _timerToTurn)
+    //        .setEase(_leanType).setLoopPingPong();
+    //}
 
 #if UNITY_EDITOR
     private void Update()
@@ -59,6 +68,7 @@ public class ScavengeController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
         _timerToTurn -= Time.fixedDeltaTime;
         if (_timerToTurn <= 0)
         {
