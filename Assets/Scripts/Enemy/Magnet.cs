@@ -38,22 +38,20 @@ public class Magnet : MonoBehaviour
 
         Vector3 targetDir = (_mainCollider.bounds.center - current.transform.position).normalized;
 
-        float forceProduct = _force;
-        float distance = Vector3.Distance(_mainCollider.transform.position, current.transform.position);
-
-        //if (distance <= _radiusWeakForce)
-        //{
-        //    forceProduct *= (1 - (distance / _radiusWeakForce));
-        //}
-
-        //if (distance <= _radiusStrongForce)
-        //{
-        //    forceProduct *= ((1 - (distance / _radiusWeakForce)) * 1.25f);
-        //}
-
         if (_attractive)
-            current.GetAttracted(targetDir * forceProduct);
+            current.GetAttracted(targetDir * (_force * forceFactor));
         else
-            current.GetAttracted(-targetDir * forceProduct);
+            current.GetAttracted(-targetDir * (_force * forceFactor));
+    }
+
+    public Magnetic GetMagnetic(int instanceID)
+    {
+        Magnetic m;
+        if (_magnetics.TryGetValue(instanceID, out m))
+        {
+            return m;
+        }
+
+        return null;
     }
 }
