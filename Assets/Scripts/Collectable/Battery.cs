@@ -29,7 +29,8 @@ public class Battery : MonoBehaviour
         if (!possivleRoy)
             return;
 
-        //TODO: ADD BATTERY
+        possivleRoy.AddBattery();
+        Destroy(gameObject);
     }
 
     void OnDrawGizmos()

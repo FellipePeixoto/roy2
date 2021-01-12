@@ -35,6 +35,7 @@ public class Klunk : MonoBehaviour
     [SerializeField] int _fuelTimeDuration = 600;
     [Tooltip("In Seconds")]
     [SerializeField] int _totalTimeToReloadFullEnergy = 240;
+    [SerializeField] int _collectedBottleRechargeValue = 2;
 
     [Space]
     [Header("Investida com escudo")]
@@ -175,7 +176,6 @@ public class Klunk : MonoBehaviour
                     _characterController.IgnoreSpeedSmooth(false);
                     _characterController.DontIncrementSpeed(false);
                     OnEndDash?.Invoke(transform.position);
-                    Debug.Log(Vector3.Distance(temp_startPosition, transform.position));
                 }
                 break;
             case KlunkState.Sk8erBoi:
@@ -226,6 +226,11 @@ public class Klunk : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void AddFuel()
+    {
+        _currentFuel = Mathf.Clamp(_currentFuel + _collectedBottleRechargeValue, 0, _maxFuel);
     }
 
     private void OnGUI()

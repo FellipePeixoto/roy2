@@ -29,7 +29,8 @@ public class Bottle : MonoBehaviour
         if (!klunk)
             return;
 
-        //TODO: ADD FUEL
+        klunk.AddFuel();
+        Destroy(gameObject);
     }
 
     void OnDrawGizmos()

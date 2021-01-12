@@ -39,9 +39,13 @@ public class Magnet : MonoBehaviour
         Vector3 targetDir = (_mainCollider.bounds.center - current.transform.position).normalized;
 
         if (_attractive)
+        {
             current.GetAttracted(targetDir * (_force * forceFactor));
+        }
         else
-            current.GetAttracted(-targetDir * (_force * forceFactor));
+        {
+            current.GetRepulsed(-targetDir * (_force * forceFactor));
+        }
     }
 
     public Magnetic GetMagnetic(int instanceID)

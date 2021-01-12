@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 635244282097056144}
   - component: {fileID: 635244282097056148}
   - component: {fileID: 5273968129056138711}
-  - component: {fileID: 6926806554069722478}
   - component: {fileID: 635244282097056145}
   - component: {fileID: 635244282097056146}
   - component: {fileID: 285075692}
   - component: {fileID: 6182821063658705899}
+  - component: {fileID: 6926806554069722478}
   m_Layer: 0
   m_Name: Set_Roy
   m_TagString: Player
@@ -56,6 +56,8 @@ MonoBehaviour:
   _maxFuel: 100
   _energyTimeDuration: 600
   _totalTimeToReloadFullFuel: 120
+  _collectedBatteryRechargeValue: 2
+  _energyLossPerSecond: 10
   _hookFuelCostPerSecond: 20
   _hookMaxDistance: 10
   _minDistanceFromHookPoint: 2
@@ -69,6 +71,7 @@ MonoBehaviour:
   _aimDebbugColorNoTarget: {r: 1, g: 0, b: 0, a: 1}
   _aimDebbugColorTarget: {r: 0, g: 1, b: 0, a: 1}
   _hookLine: {fileID: 4208326278983837473}
+  _magnetic: {fileID: 0}
   _boostCostPerSecond: 10
   _boostSpeedFactor: 3
   _characterController: {fileID: 5273968129056138711}
@@ -107,19 +110,6 @@ MonoBehaviour:
   _airSpeedFactor: 0.65
   _fallMultiply: 2.5
   _lowJumpMultiply: 2
---- !u!114 &6926806554069722478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 635244282097056159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0b0fdbf1266bc45885713e63d39a6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rb: {fileID: 635244282097056146}
 --- !u!136 &635244282097056145
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -254,6 +244,20 @@ MonoBehaviour:
   _debbugDropTrashColor: {r: 0, g: 1, b: 1, a: 1}
   _bottlePrefab: {fileID: 413353679644928126, guid: 83a78fe957683344885548876a368386,
     type: 3}
+--- !u!114 &6926806554069722478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635244282097056159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d0b0fdbf1266bc45885713e63d39a6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rb: {fileID: 635244282097056146}
+  _effectDuration: 0.75
 --- !u!1 &7802985284654274596
 GameObject:
   m_ObjectHideFlags: 0

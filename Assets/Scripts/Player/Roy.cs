@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
 
 public enum RoyStates : byte
 {
@@ -22,6 +21,8 @@ public class Roy : MonoBehaviour
     [SerializeField] int _energyTimeDuration = 600;
     [Tooltip("In Seconds")]
     [SerializeField] int _totalTimeToReloadFullFuel = 120;
+    [SerializeField] int _collectedBatteryRechargeValue = 2;
+    [SerializeField] float _energyLossPerSecond = 10f;
 
     [Space]
     [Header("Gancho")]
@@ -39,6 +40,7 @@ public class Roy : MonoBehaviour
     [SerializeField] Color _aimDebbugColorNoTarget = Color.red;
     [SerializeField] Color _aimDebbugColorTarget = Color.green;
     [SerializeField] LineRenderer _hookLine;
+    [SerializeField] Magnetic _magnetic;
 
     [Space]
     [Header("Boost turbina")]
@@ -71,7 +73,6 @@ public class Roy : MonoBehaviour
     float _fuelRecharged;
     float _rechargePerSecond;
 
-
     RaycastHit _aimHitInfo;
 
     bool _actionMovHookPressed;
@@ -87,6 +88,7 @@ public class Roy : MonoBehaviour
 
     private void Awake()
     {
+        _magnetic = GetComponent<Magnetic>();
         _currentState = RoyStates.None;
         _currentEnergy = _maxEnergy;
         _currentFuel = _maxFuel;
@@ -95,6 +97,7 @@ public class Roy : MonoBehaviour
 
         _aimController = GetComponentInChildren<AimController>();
         var playerInputComponent = GetComponent<PlayerInput>();
+        _magnetic.OnPull += _onPlayerPull_Magnetic;
 
         _actionMove = playerInputComponent.actions["Move"];
         _actionJump = playerInputComponent.actions["Jump"];
@@ -137,6 +140,11 @@ public class Roy : MonoBehaviour
     private void _actionMov1_started(InputAction.CallbackContext obj)
     {
         _actionMovHookPressed = true;
+    }
+
+    private void _onPlayerPull_Magnetic()
+    {
+        _energyConsumed += _energyConsumed * _energyLossPerSecond * Time.fixedDeltaTime;
     }
 
     private void OnGUI()
@@ -287,6 +295,12 @@ public class Roy : MonoBehaviour
         Destroy(_sprJoint);
     }
 
+    public void AddBattery() 
+    {
+        _currentEnergy = 
+        Mathf.Clamp(_currentEnergy + _collectedBatteryRechargeValue, 0, _maxEnergy);
+    }
+
     private void OnDrawGizmos()
     {
         if (_actionMove == null)
@@ -302,5 +316,10 @@ public class Roy : MonoBehaviour
             Gizmos.color = _aimDebbugColorNoTarget;
             Gizmos.DrawRay(_mainCollider.bounds.center, _actionMove.ReadValue<Vector2>() * _hookMaxDistance);
         }
+    }
+
+    private void OnDestroy()
+    {
+        _magnetic.OnPull -= _onPlayerPull_Magnetic;
     }
 }

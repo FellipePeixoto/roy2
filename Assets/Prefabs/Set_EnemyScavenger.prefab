@@ -72,11 +72,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 6452159252895933755}
-  _startPoint: {x: 0, y: 0, z: 0}
+  _startPoint: {x: 45, y: 0, z: 0}
   _mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
   _leanType: 4
-  _startFromLeftToRight: 1
-  _speed: 12
+  _startFromLeft: 1
   _maxDistance: 14
   _debbugMaxDistanceColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   _debbug_scavagePosition: 0
@@ -120,7 +119,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 186861483898232251}
-  m_Material: {fileID: 13400000, guid: 0f698ac064b11b04588476748e26c6b0, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -276,7 +275,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.031125, y: 0.6314516, z: 1}
+  m_Size: {x: 2.031125, y: 0.6314516, z: 2}
   m_Center: {x: 0, y: 3.9391108, z: 0}
 --- !u!1 &5938034535867717342
 GameObject:
