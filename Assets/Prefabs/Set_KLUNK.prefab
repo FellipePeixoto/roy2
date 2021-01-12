@@ -292,7 +292,7 @@ MonoBehaviour:
   _dropPositionOffset: {x: 1.2, y: 1, z: 1}
   _dropMask:
     serializedVersion: 2
-    m_Bits: 257
+    m_Bits: 256
   _debbugDropTrashColor: {r: 0, g: 1, b: 1, a: 1}
   _batteryPrefab: {fileID: 413353679644928126, guid: 114b6dadf8b3f3940a46ffd49868718a,
     type: 3}
