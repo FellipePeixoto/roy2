@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 635244282097056145}
   - component: {fileID: 635244282097056146}
   - component: {fileID: 285075692}
+  - component: {fileID: 6182821063658705899}
   m_Layer: 0
   m_Name: Set_Roy
   m_TagString: Player
@@ -228,6 +229,31 @@ MonoBehaviour:
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &6182821063658705899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635244282097056159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72b22a89617a28049b19ae5ae30dc170, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainCollider: {fileID: 635244282097056145}
+  _pickRadius: 2
+  _collectMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  _debbugCastColor: {r: 0, g: 1, b: 0, a: 1}
+  _dropPositionOffset: {x: 1.2, y: 1, z: 1}
+  _dropMask:
+    serializedVersion: 2
+    m_Bits: 256
+  _debbugDropTrashColor: {r: 0, g: 1, b: 1, a: 1}
+  _bottlePrefab: {fileID: 413353679644928126, guid: 83a78fe957683344885548876a368386,
+    type: 3}
 --- !u!1 &7802985284654274596
 GameObject:
   m_ObjectHideFlags: 0
