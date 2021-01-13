@@ -2,39 +2,116 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PumperState { Idle, OnTheWay, GetBack, Attacking }
+public enum PumperState { RestPosition, GoingUp, OnTop, GoingDown }
 
 public class Pumper : MonoBehaviour
 {
     [SerializeField] Transform _pumper;
     [SerializeField] Transform _restPosition;
-    [SerializeField] Transform _lowPosition;
+    [SerializeField] Transform _upperPosition;
     [SerializeField] LeanTweenType _easetype;
     [SerializeField] float _timeToComplete;
+    [SerializeField] Vector3 _scanBoxPlatOffest;
+    [SerializeField] Vector3 _scanBoxPlatHalfExtends;
     [SerializeField] Vector3 _scanBoxHalfExtends = new Vector3(.5f, 1, .5f);
     [SerializeField] float _offsetFromCenter = 3;
     [SerializeField] Color _scanBoxDebbugColor = Color.red;
     [SerializeField] LayerMask _whereIsGas = (1 << 0);
     [SerializeField] GasRobber _gasRobber;
 
-    bool _busy;
-    PumperState _currentState = PumperState.Idle;
+    PumperState _currentState = PumperState.RestPosition;
+    LTDescr _goUp;
 
     private void FixedUpdate()
     {
-        if (_busy)
+        Collider[] cols = CastSides();
+        if (cols.Length > 0)
         {
-
+            AttackSides();
             return;
         }
 
-        Collider[] colls = Cast();
-        if (colls.Length > 0)
+        cols = CastPlat();
+        if (cols.Length > 0)
         {
-            Trigger();
-            StartCoroutine(TrySteal());
-            StartCoroutine(BackToNormal());
+            GoingUp();
         }
+
+        if (_currentState == PumperState.OnTop)
+        {
+            GoDown();
+        }
+    }
+
+    void AttackSides()
+    {
+        switch (_currentState)
+        {
+            case PumperState.GoingUp:
+            case PumperState.OnTop:
+                if (_goUp != null)
+                    GoDown();
+                break;
+
+            case PumperState.RestPosition:
+                Collider[] cols = CastSides();
+                foreach (Collider col in cols)
+                {
+                    _gasRobber.TryToStealGas(col.transform.GetInstanceID());
+                }
+                break;
+        }
+    }
+
+    void GoDown()
+    {
+        if (_goUp != null)
+        {
+            LeanTween.cancel(_goUp.id);
+            _goUp = null;
+        }
+
+        _currentState = PumperState.GoingDown;
+
+        LeanTween
+            .move(_pumper.gameObject, _restPosition, _timeToComplete)
+            .setEase(_easetype)
+            .setOnComplete(() =>
+            {
+                _currentState = PumperState.RestPosition;
+            });
+    }
+
+    void GoingUp()
+    {
+        _currentState = PumperState.GoingUp;
+        if (_goUp == null)
+        {
+            _goUp = LeanTween
+            .move(_pumper.gameObject, _upperPosition, _timeToComplete)
+            .setEase(_easetype)
+            .setOnComplete(() =>
+            {
+                _currentState = PumperState.OnTop;
+            });
+        }
+    }
+
+    Collider[] CastSides()
+    {
+        List<Collider> colls = new List<Collider>();
+        colls.AddRange(Physics.OverlapBox(transform.position + Vector3.right * _offsetFromCenter, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas));
+        colls.AddRange(Physics.OverlapBox(transform.position + Vector3.left * _offsetFromCenter, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas));
+
+        return colls.ToArray();
+    }
+
+    Collider[] CastPlat()
+    {
+        List<Collider> colls = new List<Collider>();
+        colls.AddRange(Physics.OverlapBox(_pumper.transform.position + _scanBoxPlatOffest, _scanBoxPlatOffest, Quaternion.identity, _whereIsGas));
+
+        return colls.ToArray();
     }
 
     private void OnDrawGizmos()
@@ -43,64 +120,6 @@ public class Pumper : MonoBehaviour
 
         Gizmos.DrawWireCube(transform.position + Vector3.right * _offsetFromCenter, _scanBoxHalfExtends * 2);
         Gizmos.DrawWireCube(transform.position + Vector3.left * _offsetFromCenter, _scanBoxHalfExtends * 2);
-    }
-
-    void Trigger() 
-    {
-        _busy = true;
-        _currentState = PumperState.OnTheWay;
-        LeanTween
-            .move(_pumper.gameObject, _lowPosition, _timeToComplete)
-            .setEase(_easetype)
-            .setOnComplete(()=> 
-            {
-                Collider[] colls = Cast();
-                if (colls.Length > 0)
-                {
-                    foreach (Collider col in colls)
-                    {
-                        _gasRobber.TryToStealGas(col.transform.GetInstanceID());
-                    }
-                    _currentState = PumperState.Attacking;
-                }
-                else
-                {
-                    _currentState = PumperState.GetBack;
-                }
-            });
-    }
-
-    IEnumerator TrySteal()
-    {
-        yield return new WaitUntil(() => { return _currentState == PumperState.Attacking; });
-        Collider[] colls = Cast();
-        while (colls.Length > 0)
-        {
-            foreach (Collider col in colls)
-            {
-                _gasRobber.TryToStealGas(col.transform.GetInstanceID());
-            }
-            colls = Cast();
-            yield return new WaitForFixedUpdate();
-        }
-        _currentState = PumperState.GetBack;
-    }
-
-    IEnumerator BackToNormal()
-    {
-        yield return new WaitUntil(() => { return _currentState == PumperState.GetBack; });
-        LeanTween
-            .move(_pumper.gameObject, _restPosition, _timeToComplete)
-            .setEase(_easetype)
-            .setOnComplete(()=> { _busy = false; });
-    }
-
-    Collider[] Cast()
-    {
-        List<Collider> colls = new List<Collider>();
-        colls.AddRange(Physics.OverlapBox(transform.position + Vector3.right * _offsetFromCenter, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas));
-        colls.AddRange(Physics.OverlapBox(transform.position + Vector3.left * _offsetFromCenter, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas));
-
-        return colls.ToArray();
+        Gizmos.DrawWireCube(_pumper.transform.position + _scanBoxPlatOffest, _scanBoxPlatHalfExtends * 2);
     }
 }
