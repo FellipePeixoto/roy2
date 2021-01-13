@@ -176,6 +176,7 @@ GameObject:
   - component: {fileID: 4828082284466744310}
   - component: {fileID: 4828082284466744309}
   - component: {fileID: 5125189867493480807}
+  - component: {fileID: 4938628824773540530}
   m_Layer: 0
   m_Name: Set_KLUNK
   m_TagString: Untagged
@@ -439,6 +440,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _softFric: {fileID: 13400000, guid: e05b1438de1ce5d4ca9bdaf2fbfc368f, type: 2}
   _hardFric: {fileID: 13400000, guid: 868608b94e6e0334994e177da4ca99bd, type: 2}
+--- !u!114 &4938628824773540530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4828082284466744314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2b9fbec18b5d3342b3ea6ac767128d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4828082284540568221
 GameObject:
   m_ObjectHideFlags: 0
