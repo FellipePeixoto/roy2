@@ -1388,6 +1388,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73fdf4255aa9e464fb57f4be51c365f0, type: 3}
+--- !u!1 &512371250 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 635244282097056159, guid: 7a83110a11c770746a07df9e739f9c7b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2036959042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &512371251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512371250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &550782897
 GameObject:
   m_ObjectHideFlags: 0
@@ -4696,6 +4720,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1114909598 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4828082284466744314, guid: 91e938a864d4a7741bf3eb360a12cb3d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1355328075}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1114909599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114909598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1327303615
 GameObject:
   m_ObjectHideFlags: 0
