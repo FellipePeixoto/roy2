@@ -36,6 +36,7 @@ public class Klunk : MonoBehaviour
     [Tooltip("In Seconds")]
     [SerializeField] int _totalTimeToReloadFullEnergy = 240;
     [SerializeField] int _collectedBottleRechargeValue = 2;
+    [SerializeField] float _energyLossPerSecond = 25f;
 
     [Space]
     [Header("Investida com escudo")]
@@ -50,6 +51,9 @@ public class Klunk : MonoBehaviour
     [SerializeField] int _sk8erBoiEnergyCostPerSecond = 10;
     [Tooltip("Quantas vezes o skate é maior em relação a velocidade normal")]
     [SerializeField] float _sk8SpeedFactor = 3;
+    [Space]
+
+    [SerializeField] Magnetic _magnetic;
 
     KlunkState _currentState;
     FrontAttack _frontAttack;
@@ -79,6 +83,8 @@ public class Klunk : MonoBehaviour
 
     private void Awake()
     {
+        _magnetic = GetComponent<Magnetic>();
+        _magnetic.OnPull += _onPlayerPull_Magnetic;
         _currentState = KlunkState.None;
         _currentFuel = _maxFuel;
         _currentEnergy = _maxEnergy;
@@ -100,6 +106,11 @@ public class Klunk : MonoBehaviour
         _actionMov2 = playerInput.actions["Mov2"];
         _actionMov2.performed += _actionMov2_performed;
         _actionMov2.canceled += _actionMov2_canceled;
+    }
+
+    private void _onPlayerPull_Magnetic()
+    {
+        _energyConsumed += _energyConsumed * _energyLossPerSecond * Time.fixedDeltaTime;
     }
 
     private void _actionJump_performed(InputAction.CallbackContext obj)
