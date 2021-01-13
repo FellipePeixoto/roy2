@@ -28,10 +28,10 @@ public class Pumper : MonoBehaviour
             return;
         }
 
-        Collider[] colls = Physics.OverlapBox(transform.position, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas);
+        Collider[] colls = Cast();
         if (colls.Length > 0)
         {
-            StartCoroutine(Trigger());
+            Trigger();
             StartCoroutine(TrySteal());
             StartCoroutine(BackToNormal());
         }
@@ -45,40 +45,42 @@ public class Pumper : MonoBehaviour
         Gizmos.DrawWireCube(transform.position + Vector3.left * _offsetFromCenter, _scanBoxHalfExtends * 2);
     }
 
-    IEnumerator Trigger() 
+    void Trigger() 
     {
         _busy = true;
         _currentState = PumperState.OnTheWay;
         LeanTween
             .move(_pumper.gameObject, _lowPosition, _timeToComplete)
-            .setEase(_easetype);
-        yield return new WaitUntil(() => { return _pumper.transform.position.y == 0; });
-        Collider[] colls = Physics.OverlapBox(transform.position, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas);
-        if (colls.Length > 0)
-        {
-            foreach(Collider col in colls)
+            .setEase(_easetype)
+            .setOnComplete(()=> 
             {
-                _gasRobber.TryToStealGas(col.transform.GetInstanceID());
-            }
-            _currentState = PumperState.Attacking;
-        }
-        else
-        {
-            _currentState = PumperState.GetBack;
-        }
+                Collider[] colls = Cast();
+                if (colls.Length > 0)
+                {
+                    foreach (Collider col in colls)
+                    {
+                        _gasRobber.TryToStealGas(col.transform.GetInstanceID());
+                    }
+                    _currentState = PumperState.Attacking;
+                }
+                else
+                {
+                    _currentState = PumperState.GetBack;
+                }
+            });
     }
 
     IEnumerator TrySteal()
     {
         yield return new WaitUntil(() => { return _currentState == PumperState.Attacking; });
-        Collider[] colls = Physics.OverlapBox(transform.position, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas);
+        Collider[] colls = Cast();
         while (colls.Length > 0)
         {
             foreach (Collider col in colls)
             {
                 _gasRobber.TryToStealGas(col.transform.GetInstanceID());
             }
-            colls = Physics.OverlapBox(transform.position, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas);
+            colls = Cast();
             yield return new WaitForFixedUpdate();
         }
         _currentState = PumperState.GetBack;
@@ -91,5 +93,14 @@ public class Pumper : MonoBehaviour
             .move(_pumper.gameObject, _restPosition, _timeToComplete)
             .setEase(_easetype)
             .setOnComplete(()=> { _busy = false; });
+    }
+
+    Collider[] Cast()
+    {
+        List<Collider> colls = new List<Collider>();
+        colls.AddRange(Physics.OverlapBox(transform.position + Vector3.right * _offsetFromCenter, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas));
+        colls.AddRange(Physics.OverlapBox(transform.position + Vector3.left * _offsetFromCenter, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas));
+
+        return colls.ToArray();
     }
 }
