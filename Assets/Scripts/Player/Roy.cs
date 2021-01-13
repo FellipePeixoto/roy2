@@ -78,7 +78,7 @@ public class Roy : MonoBehaviour
     bool _actionMovHookPressed;
     bool _actionMovBoostPressed;
     bool _jump;
-
+    bool _isWalking, _isHovering;
     private void Reset()
     {
         _characterController = GetComponent<RoyCharController>();
@@ -109,7 +109,10 @@ public class Roy : MonoBehaviour
         _actionMov2 = playerInputComponent.actions["Mov2"];
         _actionMov2.performed += _actionMov2_performed;
         _actionMov2.canceled += _actionMov2_canceled;
+        
     }
+
+    
 
     private void _actionJump_performed(InputAction.CallbackContext obj)
     {
@@ -211,9 +214,15 @@ public class Roy : MonoBehaviour
                 break;
 
             case RoyStates.Boosting:
+                if(!_isHovering) {
+                    _isHovering = true;
+                    AudioManager.instance.Play("roy_hover");
+                }
                 if (_currentFuel <= 0 || !_actionMovBoostPressed)
                 {
                     _currentState = RoyStates.None;
+                    AudioManager.instance.Stop("roy_hover");
+                    _isHovering = false;
                 }
                 _fuelConsumed += _boostCostPerSecond * Time.fixedDeltaTime;
                 if (_fuelConsumed >= 1)
@@ -224,6 +233,11 @@ public class Roy : MonoBehaviour
                 break;
 
             default:
+                if(!_isWalking) {
+                    _isWalking = true;
+                    
+                    AudioManager.instance.Play("roy_walk");
+                }
                 _characterController.Move(_actionMove.ReadValue<Vector2>(), 1f, _jump);
                 if (_actionMovHookPressed
                     && _currentFuel >= _hookFuelCostPerSecond
@@ -231,12 +245,16 @@ public class Roy : MonoBehaviour
                 {
                     _characterController.SetHook(true);
                     _currentState = RoyStates.Hooked;
+                    AudioManager.instance.Stop("roy_walk");
+                    _isWalking = false;
                     HookTo(_aimHitInfo.point);
                     return;
                 }
                 if (_actionMovBoostPressed && _currentFuel >= _boostCostPerSecond)
                 {
                     _currentState = RoyStates.Boosting;
+                    AudioManager.instance.Stop("roy_walk");
+                    _isWalking = false;
                     return;
                 }
                 break;
@@ -287,12 +305,14 @@ public class Roy : MonoBehaviour
         _hookLine.enabled = true;
         _hookLine.SetPositions(new Vector3[2]);
         _hookLine.SetPosition(1, hookPoint);
+        AudioManager.instance.Play("roy_hookset");
     }
 
     void UnHook()
     {
         _hookLine.enabled = false;
         Destroy(_sprJoint);
+        AudioManager.instance.Play("roy_hookrelease");
     }
 
     public void AddBattery() 
@@ -321,5 +341,16 @@ public class Roy : MonoBehaviour
     private void OnDestroy()
     {
         _magnetic.OnPull -= _onPlayerPull_Magnetic;
+    }
+
+    public Vector2 GetCurrentHpSp(){
+        return new Vector2(_currentEnergy,_currentFuel);
+    }
+    public void SetCurrentHpSp(Vector2 stats){
+        int hp = (int)stats.x;
+        int sp = (int)stats.y;
+
+        _currentEnergy = hp;
+        _currentFuel = sp;
     }
 }
