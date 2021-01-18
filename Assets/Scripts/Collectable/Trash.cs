@@ -13,6 +13,7 @@ public class Trash : MonoBehaviour
 
     public void HideTrash()
     {
+        
         gameObject.SetActive(false);
         _rb.velocity = Vector3.zero;
         transform.rotation = Quaternion.identity;
@@ -24,6 +25,7 @@ public class Trash : MonoBehaviour
         _rb.velocity = Vector3.zero;
         transform.rotation = Quaternion.identity;
         transform.position = newPosition;
+        
     }
 
     public void DestroyTrash()

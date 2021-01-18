@@ -66,6 +66,7 @@ public class RoyCharController : MonoBehaviour
             _horizontalInertia = _rb.velocity.x;
             _rb.velocity += Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y);
             CanJump = false;
+            AudioManager.instance.Play("roy_jump");
         }
 
         //if (_hookEnabled && _rb.velocity.y <= 0)
@@ -264,5 +265,11 @@ public class RoyCharController : MonoBehaviour
     {
         DrawGroundChecker();
         DrawSidesChecker();
+    }
+
+    private void OnCollisionEnter(Collision other) {
+        if (other.contacts[0].normal == Vector3.up){
+            AudioManager.instance.Play("roy_landing");
+        }
     }
 }

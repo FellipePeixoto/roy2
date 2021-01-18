@@ -14,6 +14,7 @@ public class WeakWallController : MonoBehaviour
     public void BreakWall()
     {
         col.enabled = false;
+        AudioManager.instance.Play("klunk_wallbreak");
         //TODO: REMOVER LINHA ABAIXO
         gameObject.SetActive(false);
     }
