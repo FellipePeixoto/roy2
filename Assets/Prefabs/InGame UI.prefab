@@ -3040,6 +3040,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7600532919133813627}
   - component: {fileID: 7600532919133813625}
+  - component: {fileID: 3029901380167457447}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
@@ -3076,6 +3077,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7600532919133813628}
   m_CullTransparentMesh: 0
+--- !u!114 &3029901380167457447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7600532919133813628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7da66accd120c9c4eb8c9e0197c135be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _royEnergy: {fileID: 139795418082190185}
+  _royFuel: {fileID: 1829963800281518840}
+  _klunkFuel: {fileID: 6883668948743352310}
+  _klunkEnergy: {fileID: 1150425406143804921}
 --- !u!1 &7600532919140793802
 GameObject:
   m_ObjectHideFlags: 0
@@ -4667,7 +4684,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7600532919407410636
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7007,8 +7024,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7600532918689766351}
-        m_MethodName: QuitToMenu
-        m_Mode: 1
+        m_MethodName: ChangeToScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

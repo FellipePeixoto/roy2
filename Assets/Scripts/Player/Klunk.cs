@@ -69,6 +69,9 @@ public class Klunk : MonoBehaviour
     int _currentFuel;
     int _currentEnergy;
 
+    public event CurrentHandler OnCurrentFuelChange;
+    public event CurrentHandler OnCurrentEnergyChange;
+
     float _fuelPerSecond;
     float _rechargePerSecond;
     float _remainingTimeDash;
@@ -80,6 +83,7 @@ public class Klunk : MonoBehaviour
     bool _jump;
 
     Vector2 temp_startPosition;
+    private InGameUIController inGameUIController;
 
     private void Awake()
     {
@@ -87,7 +91,9 @@ public class Klunk : MonoBehaviour
         _magnetic.OnPull += _onPlayerPull_Magnetic;
         _currentState = KlunkState.None;
         _currentFuel = _maxFuel;
+        OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel);
         _currentEnergy = _maxEnergy;
+        OnCurrentEnergyChange?.Invoke((float)_currentEnergy / _maxEnergy);
         _fuelPerSecond = (float)_maxFuel / _fuelTimeDuration;
         _rechargePerSecond = (float)_maxEnergy / _totalTimeToReloadFullEnergy;
 
@@ -106,26 +112,35 @@ public class Klunk : MonoBehaviour
         _actionMov2 = playerInput.actions["Mov2"];
         _actionMov2.performed += _actionMov2_performed;
         _actionMov2.canceled += _actionMov2_canceled;
+        inGameUIController = FindObjectOfType<InGameUIController>();
     }
 
     private void _onPlayerPull_Magnetic()
     {
+        if (inGameUIController.Paused)
+            return;
         _energyConsumed += _energyConsumed * _energyLossPerSecond * Time.fixedDeltaTime;
     }
 
     private void _actionJump_performed(InputAction.CallbackContext obj)
     {
+        if (inGameUIController.Paused)
+            return;
         _jump = true;
     }
 
     private void _actionJump_canceled(InputAction.CallbackContext obj)
     {
+        if (inGameUIController.Paused)
+            return;
         _jump = false;
         _characterController.CanJump = true;
     }
 
     private void _frontAttackChecker_OnTriggerEnterEvent(int layer)
     {
+        if (inGameUIController.Paused)
+            return;
         if (LayerMask.NameToLayer("Ground") == layer)
         {
             _hitWallWhileDash = true;
@@ -134,11 +149,15 @@ public class Klunk : MonoBehaviour
 
     private void _actionMov2_performed(InputAction.CallbackContext obj)
     {
+        if (inGameUIController.Paused)
+            return;
         _actionMov2Pressed = true;
     }
 
     private void _actionMov2_canceled(InputAction.CallbackContext obj)
     {
+        if (inGameUIController.Paused)
+            return;
         _actionMov2Pressed = false;
     }
 
@@ -148,7 +167,9 @@ public class Klunk : MonoBehaviour
         if (_infinityMode)
         {
             _currentEnergy = _maxEnergy;
+            OnCurrentEnergyChange?.Invoke((float)_currentEnergy / _maxEnergy);
             _currentFuel = _maxFuel;
+            OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel);
         }
 #endif
         if (_currentFuel <= 0)
@@ -160,6 +181,7 @@ public class Klunk : MonoBehaviour
         {
             _fuelConsumed -= 1;
             _currentFuel = Mathf.Clamp(--_currentFuel, 0, _maxFuel);
+            OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel);
         }
 
         if (_currentEnergy < _maxEnergy)
@@ -168,6 +190,7 @@ public class Klunk : MonoBehaviour
         {
             _energyRecharged -= 1;
             _currentEnergy = Mathf.Clamp(++_currentEnergy, 0, _maxEnergy);
+            OnCurrentEnergyChange?.Invoke((float)_currentEnergy / _maxEnergy);
         }
 
         switch (_currentState)
@@ -203,6 +226,7 @@ public class Klunk : MonoBehaviour
                 {
                     _energyConsumed -= 1;
                     _currentEnergy = Mathf.Clamp(--_currentEnergy, 0, _maxEnergy);
+                    OnCurrentEnergyChange?.Invoke((float)_currentEnergy / _maxEnergy);
                 }
                 break;
             default:
@@ -220,6 +244,7 @@ public class Klunk : MonoBehaviour
                     _remainingTimeDash -= Time.fixedDeltaTime;
                     _currentState = KlunkState.Dashing;
                     _currentEnergy = Mathf.Clamp(_currentEnergy - _dashEnergyCost, 0, _maxEnergy);
+                    OnCurrentEnergyChange?.Invoke((float)_currentEnergy / _maxEnergy);
                     _frictionController.SetZeroFriction();
                     _characterController.IgnoreHorizontalClampedSpeed(true);
                     _characterController.IgnoreSpeedSmooth(true);
@@ -242,6 +267,7 @@ public class Klunk : MonoBehaviour
     public void AddFuel()
     {
         _currentFuel = Mathf.Clamp(_currentFuel + _collectedBottleRechargeValue, 0, _maxFuel);
+        OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel);
     }
 
     private void OnGUI()

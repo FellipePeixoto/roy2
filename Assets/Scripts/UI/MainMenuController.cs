@@ -121,4 +121,13 @@ public class MainMenuController : MonoBehaviour
         Debug.Log("Quitting Application");
         Application.Quit();
     }
+
+    public void ChangeToScene(int buildIndex)
+    {
+        SceneSingleton.LoadScene(buildIndex);
+    }
+    public void ChangeToScene(string sceneName)
+    {
+        SceneSingleton.LoadScene(sceneName);
+    }
 }

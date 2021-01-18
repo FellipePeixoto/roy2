@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class InGameUIController : MonoBehaviour
@@ -10,25 +11,25 @@ public class InGameUIController : MonoBehaviour
     [SerializeField] Button[] quitBts;
     int currentScreen = 0, currentOptionTab = 0;
     bool configuring;
-    void Start()
+    bool _paused;
+    public bool Paused { get { return _paused; } }
+
+    private void Start()
     {
-        PauseGame(true);
+        PauseGame(false);
     }
 
     void Update()
     {
-        /*if (Input.GetKey("Cancel")) 
+        if(Gamepad.current != null && Gamepad.current.startButton.wasPressedThisFrame)
         {
-            PauseGame(true);
+            PauseGame(!_paused);
         }
-        if (configuring)
-        {
-            if (Input.GetKey("Cancel")) ChangeSelection(currentOptionTab);
-        }*/
     }
 
     public void PauseGame(bool paused)
     {
+        _paused = paused;
         menu.SetActive(paused);
         Time.timeScale = paused? 0 : 1;
         if (paused) ChangeScreen(0);
@@ -108,5 +109,14 @@ public class InGameUIController : MonoBehaviour
     {
         Debug.Log("Go to Menu");
         //Application.Quit();
+    }
+
+    public void ChangeToScene(int buildIndex)
+    {
+        SceneSingleton.LoadScene(buildIndex);
+    }
+    public void ChangeToScene(string sceneName)
+    {
+        SceneSingleton.LoadScene(sceneName);
     }
 }
