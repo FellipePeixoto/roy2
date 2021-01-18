@@ -248,12 +248,12 @@ public class Roy : MonoBehaviour
             case RoyStates.Boosting:
                 if(!_isHovering) {
                     _isHovering = true;
-                    AudioManager.instance.Play("roy_hover");
+                    //AudioManager.instance.Play("roy_hover");
                 }
                 if (_currentFuel <= 0 || !_actionMovBoostPressed)
                 {
                     _currentState = RoyStates.None;
-                    AudioManager.instance.Stop("roy_hover");
+                    //AudioManager.instance.Stop("roy_hover");
                     _isHovering = false;
                 }
                 _fuelConsumed += _boostCostPerSecond * Time.fixedDeltaTime;
@@ -269,7 +269,7 @@ public class Roy : MonoBehaviour
                 if(!_isWalking) {
                     _isWalking = true;
                     
-                    AudioManager.instance.Play("roy_walk");
+                    //AudioManager.instance.Play("roy_walk");
                 }
                 _characterController.Move(_actionMove.ReadValue<Vector2>(), 1f, _jump);
                 if (_actionMovHookPressed
@@ -278,7 +278,7 @@ public class Roy : MonoBehaviour
                 {
                     _characterController.SetHook(true);
                     _currentState = RoyStates.Hooked;
-                    AudioManager.instance.Stop("roy_walk");
+                    //AudioManager.instance.Stop("roy_walk");
                     _isWalking = false;
                     HookTo(_aimHitInfo.point);
                     return;
@@ -286,7 +286,7 @@ public class Roy : MonoBehaviour
                 if (_actionMovBoostPressed && _currentFuel >= _boostCostPerSecond)
                 {
                     _currentState = RoyStates.Boosting;
-                    AudioManager.instance.Stop("roy_walk");
+                    //AudioManager.instance.Stop("roy_walk");
                     _isWalking = false;
                     return;
                 }
@@ -338,14 +338,14 @@ public class Roy : MonoBehaviour
         _hookLine.enabled = true;
         _hookLine.SetPositions(new Vector3[2]);
         _hookLine.SetPosition(1, hookPoint);
-        AudioManager.instance.Play("roy_hookset");
+        //AudioManager.instance.Play("roy_hookset");
     }
 
     void UnHook()
     {
         _hookLine.enabled = false;
         Destroy(_sprJoint);
-        AudioManager.instance.Play("roy_hookrelease");
+        //AudioManager.instance.Play("roy_hookrelease");
     }
 
     public void AddBattery() 

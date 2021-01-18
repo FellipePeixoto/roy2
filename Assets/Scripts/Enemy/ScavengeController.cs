@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[ExecuteInEditMode]
 public class ScavengeController : MonoBehaviour
 {
     [SerializeField] Rigidbody _rb;
-    [SerializeField] Vector3 _startPoint;
+    [SerializeField] GameObject _scavenger;
     [SerializeField] Mesh _mesh;
     [Space]
 
@@ -23,42 +21,34 @@ public class ScavengeController : MonoBehaviour
     private void Reset()
     {
         _rb = GetComponent<Rigidbody>();
-        _startPoint = transform.position;
     }
 
     private void Start()
     {
-        if (!_startFromLeft)
+        if (_startFromLeft)
         {
-            _maxDistance = -_maxDistance;
-            transform.position += Vector3.right * _maxDistance;
+            _scavenger.transform.localPosition = new Vector3(0, 0);
+
+            LeanTween.moveLocalX(_scavenger, _maxDistance, _timerToTurn)
+                .setEase(_leanType).setLoopPingPong();
         }
+        else
+        {
+            _scavenger.transform.localPosition = new Vector3(_maxDistance, 0);
 
-        LeanTween.moveX(gameObject, transform.position.x + _maxDistance, _timerToTurn)
-            .setEase(_leanType).setLoopPingPong();
+            LeanTween.moveLocalX(_scavenger, 0, _timerToTurn)
+                .setEase(_leanType).setLoopPingPong();
+        }
     }
-
-#if UNITY_EDITOR
-    private void Update()
-    {
-        if (Application.isPlaying)
-            return;
-
-        transform.position = 
-            new Vector3(_startPoint.x + (_maxDistance * _debbug_scavagePosition),
-            _startPoint.y,
-            _startPoint.z);
-    }
-#endif
 
     private void OnDrawGizmos()
     {
         Gizmos.color = _debbugMaxDistanceColor;
-        Vector3 center = Vector3.Lerp(_startPoint, _startPoint + Vector3.right * _maxDistance, .5f);
+        Vector3 center = Vector3.Lerp(transform.position, transform.position + Vector3.right * _maxDistance, .5f);
         Gizmos.DrawCube(center, Vector3.one + Vector3.right * _maxDistance);
         if (_startFromLeft)
-            Gizmos.DrawMesh(_mesh, _startPoint);
+            Gizmos.DrawMesh(_mesh, transform.position);
         else
-            Gizmos.DrawMesh(_mesh, _startPoint + Vector3.right * _maxDistance);
+            Gizmos.DrawMesh(_mesh, transform.position + Vector3.right * _maxDistance);
     }
 }

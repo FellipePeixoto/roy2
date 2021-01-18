@@ -15,7 +15,6 @@ public class Scavenger : MonoBehaviour
 
     private void Reset()
     {
-        _mainCollider = GetComponent<Collider>();
         _magnet = GetComponent<Magnet>();
     }
 

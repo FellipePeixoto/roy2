@@ -68,7 +68,7 @@ public class RoyCharController : MonoBehaviour
             _rb.velocity += Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y);
             CanJump = false;
             _animator.Play("Roy_Armature_Jump_in");
-            AudioManager.instance.Play("roy_jump");
+            //AudioManager.instance.Play("roy_jump");
         }
 
         if (_rb.velocity.y < 0 && !_hookEnabled)
@@ -272,7 +272,7 @@ public class RoyCharController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) {
         if (other.contacts[0].normal == Vector3.up){
-            AudioManager.instance.Play("roy_landing");
+            //AudioManager.instance.Play("roy_landing");
         }
     }
 }

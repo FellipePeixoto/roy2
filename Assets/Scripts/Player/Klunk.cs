@@ -200,7 +200,7 @@ public class Klunk : MonoBehaviour
                 _remainingTimeDash -= Time.fixedDeltaTime;
                 if (!_isDashing) {
                     _isDashing = true;
-                    AudioManager.instance.Play("klunk_dash");
+                    //AudioManager.instance.Play("klunk_dash");
                 } 
                 if (_remainingTimeDash <= 0 || _hitWallWhileDash)
                 {
@@ -225,12 +225,12 @@ public class Klunk : MonoBehaviour
                     _characterController.SetBaseSpeedMultiplier(1);
                     OnEndSkate?.Invoke(transform.position);
                     _isSkating = false;
-                    AudioManager.instance.Stop("klunk_skate");
+                    //AudioManager.instance.Stop("klunk_skate");
                     return;
                 }
                 if (!_isSkating){
                     _isSkating = true;
-                    AudioManager.instance.Play("klunk_skate");
+                    //AudioManager.instance.Play("klunk_skate");
                 }
                 _characterController.Move(_actionMove.ReadValue<Vector2>(), _sk8SpeedFactor, _jump);
                 _energyConsumed += _sk8erBoiEnergyCostPerSecond * Time.fixedDeltaTime;
@@ -245,7 +245,7 @@ public class Klunk : MonoBehaviour
                 _characterController.Move(_actionMove.ReadValue<Vector2>(), 1, _jump);
                 if(!_isWalking){
                     _isWalking = true;
-                    AudioManager.instance.Play("klunk_walk");
+                    //AudioManager.instance.Play("klunk_walk");
                 }
                 if (_actionMov1.triggered && _currentEnergy >= _dashEnergyCost)
                 {
@@ -268,7 +268,7 @@ public class Klunk : MonoBehaviour
                     OnStartDash?.Invoke(transform.position);
                     temp_startPosition = transform.position;
                     _isWalking = false;
-                    AudioManager.instance.Play("klunk_walk");
+                    //AudioManager.instance.Play("klunk_walk");
                     return;
                 }
                 else if (_actionMov2Pressed && _currentEnergy > _sk8erBoiEnergyCostPerSecond)
@@ -277,7 +277,7 @@ public class Klunk : MonoBehaviour
                     _characterController.SetBaseSpeedMultiplier(_sk8SpeedFactor);
                     OnStartSkate?.Invoke(transform.position);
                     _isWalking = false;
-                    AudioManager.instance.Play("klunk_walk");
+                    //AudioManager.instance.Play("klunk_walk");
                     return;
                 }
                 break;
@@ -288,7 +288,7 @@ public class Klunk : MonoBehaviour
     {
         _currentFuel = Mathf.Clamp(_currentFuel + _collectedBottleRechargeValue, 0, _maxFuel);
         OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel);
-        AudioManager.instance.Play("klunk_fuelrecharge");
+        //AudioManager.instance.Play("klunk_fuelrecharge");
     }
 
     private void OnGUI()

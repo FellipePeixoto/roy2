@@ -68,7 +68,7 @@ public class KlunkCharController : MonoBehaviour
             _horizontalInertia = _rb.velocity.x;
             _rb.velocity += Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y);
             CanJump = false;
-            AudioManager.instance.Play("klunk_jump");
+            //AudioManager.instance.Play("klunk_jump");
         }
 
         if (_rb.velocity.y < 0)
@@ -259,7 +259,7 @@ public class KlunkCharController : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) {
         if(other.contacts[0].normal == Vector3.up){
-            AudioManager.instance.Play("klunk_landing");
+            //AudioManager.instance.Play("klunk_landing");
         }
     }
 }

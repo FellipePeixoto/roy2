@@ -53,7 +53,7 @@ public class KlunkInteractController : MonoBehaviour
             Instantiate(_batteryPrefab,
                 transform.position + transform.up * (transform.localScale.y),
                 Quaternion.identity);
-            AudioManager.instance.Play("klunk_trash_process");
+            //AudioManager.instance.Play("klunk_trash_process");
         }
     }
 
@@ -65,7 +65,7 @@ public class KlunkInteractController : MonoBehaviour
             Vector3 offset = new Vector3(transform.right.x * _dropPositionOffset.x, transform.right.y * _dropPositionOffset.y);
             CurrentTrash.DropTrash(_mainCollider.bounds.center + offset);
             CurrentTrash = null;
-            AudioManager.instance.Play("klunk_trash_letgo");
+            //AudioManager.instance.Play("klunk_trash_letgo");
             return;
         }
 
@@ -78,7 +78,7 @@ public class KlunkInteractController : MonoBehaviour
             trash.HideTrash();
             CurrentTrash = trash;
             _currentDebbugColorTrash = _debbugDropTrashColor;
-            AudioManager.instance.Play("klunk_trash_collect");
+            //AudioManager.instance.Play("klunk_trash_collect");
         }
     }
 
