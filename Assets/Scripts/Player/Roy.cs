@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
+public delegate void CurrentHandler(float percent);
+
 public enum RoyStates : byte
 {
     Hooked,
@@ -78,6 +80,10 @@ public class Roy : MonoBehaviour
     bool _actionMovHookPressed;
     bool _actionMovBoostPressed;
     bool _jump;
+    private InGameUIController inGameUIController;
+
+    public event CurrentHandler OnCurrentEnergyChange;
+    public event CurrentHandler OnCurrentFuelChange;
 
     private void Reset()
     {
@@ -91,7 +97,9 @@ public class Roy : MonoBehaviour
         _magnetic = GetComponent<Magnetic>();
         _currentState = RoyStates.None;
         _currentEnergy = _maxEnergy;
-        _currentFuel = _maxFuel;
+        OnCurrentEnergyChange?.Invoke((float)_currentEnergy / _maxEnergy);
+        _currentFuel = _maxFuel; 
+        OnCurrentFuelChange?.Invoke((float) _currentFuel / _maxFuel);
         _energyPerSecond = (float)_maxEnergy / _energyTimeDuration;
         _rechargePerSecond = (float)_maxFuel / _totalTimeToReloadFullFuel;
 
@@ -109,41 +117,56 @@ public class Roy : MonoBehaviour
         _actionMov2 = playerInputComponent.actions["Mov2"];
         _actionMov2.performed += _actionMov2_performed;
         _actionMov2.canceled += _actionMov2_canceled;
+        inGameUIController = FindObjectOfType<InGameUIController>();
     }
 
     private void _actionJump_performed(InputAction.CallbackContext obj)
     {
+        if (inGameUIController.Paused)
+            return;
         _jump = true;
     }
 
     private void _actionJump_canceled(InputAction.CallbackContext obj)
     {
+        if (inGameUIController.Paused)
+            return;
         _jump = false;
         _characterController.CanJump = true;
     }
 
     private void _actionMov2_canceled(InputAction.CallbackContext obj)
     {
+        if (inGameUIController.Paused)
+            return;
         _actionMovBoostPressed = false;
     }
 
     private void _actionMov2_performed(InputAction.CallbackContext obj)
     {
+        if (inGameUIController.Paused)
+            return;
         _actionMovBoostPressed = true;
     }
 
     private void _actionMov1_canceled(InputAction.CallbackContext obj)
     {
+        if (inGameUIController.Paused)
+            return;
         _actionMovHookPressed = false;
     }
 
     private void _actionMov1_started(InputAction.CallbackContext obj)
     {
+        if (inGameUIController.Paused)
+            return;
         _actionMovHookPressed = true;
     }
 
     private void _onPlayerPull_Magnetic()
     {
+        if (inGameUIController.Paused)
+            return;
         _energyConsumed += _energyConsumed * _energyLossPerSecond * Time.fixedDeltaTime;
     }
 
@@ -169,7 +192,9 @@ public class Roy : MonoBehaviour
         if (_infinityMode)
         {
             _currentEnergy = _maxEnergy;
-            _currentFuel = _maxFuel;
+            OnCurrentEnergyChange?.Invoke((float)_currentEnergy / _maxEnergy);
+            _currentFuel = _maxFuel; 
+            OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel);
         }
 #endif
         if (_currentEnergy <= 0)
@@ -181,6 +206,7 @@ public class Roy : MonoBehaviour
         {
             _energyConsumed -= 1;
             _currentEnergy = Mathf.Clamp(--_currentEnergy, 0, _maxEnergy);
+            OnCurrentEnergyChange?.Invoke((float)_currentEnergy / _maxEnergy);
         }
 
         if (_currentFuel < _maxFuel)
@@ -188,7 +214,9 @@ public class Roy : MonoBehaviour
         if (_fuelRecharged >= 1)
         {
             _fuelRecharged -= 1;
-            _currentFuel = Mathf.Clamp(++_currentFuel, 0, _maxFuel);
+            _currentFuel = Mathf.Clamp(++_currentFuel, 0, _maxFuel); 
+            OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel); 
+            OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel);
         }
 
         switch (_currentState)
@@ -205,7 +233,8 @@ public class Roy : MonoBehaviour
                 if (_fuelConsumed >= 1)
                 {
                     _fuelConsumed -= 1;
-                    _currentFuel = Mathf.Clamp(--_currentFuel, 0, _maxFuel);
+                    _currentFuel = Mathf.Clamp(--_currentFuel, 0, _maxFuel); 
+                    OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel);
                 }
                 _characterController.Move(_actionMove.ReadValue<Vector2>(), 1, false);
                 break;
@@ -219,7 +248,8 @@ public class Roy : MonoBehaviour
                 if (_fuelConsumed >= 1)
                 {
                     _fuelConsumed -= 1;
-                    _currentFuel = Mathf.Clamp(--_currentFuel, 0, _maxFuel);
+                    _currentFuel = Mathf.Clamp(--_currentFuel, 0, _maxFuel); 
+                    OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel);
                 }
                 break;
 
@@ -299,6 +329,7 @@ public class Roy : MonoBehaviour
     {
         _currentEnergy = 
         Mathf.Clamp(_currentEnergy + _collectedBatteryRechargeValue, 0, _maxEnergy);
+        OnCurrentEnergyChange?.Invoke((float)_currentEnergy / _maxEnergy);
     }
 
     private void OnDrawGizmos()
