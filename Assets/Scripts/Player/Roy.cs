@@ -83,6 +83,8 @@ public class Roy : MonoBehaviour
     bool _isWalking, _isHovering;
     private InGameUIController inGameUIController;
 
+    [SerializeField] Animator _animator;
+
     public event CurrentHandler OnCurrentEnergyChange;
     public event CurrentHandler OnCurrentFuelChange;
 
@@ -118,6 +120,7 @@ public class Roy : MonoBehaviour
         _actionMov2 = playerInputComponent.actions["Mov2"];
         _actionMov2.performed += _actionMov2_performed;
         _actionMov2.canceled += _actionMov2_canceled;
+        _animator.Play("Roy_Armature_Idle");
         inGameUIController = FindObjectOfType<InGameUIController>();
     }
 

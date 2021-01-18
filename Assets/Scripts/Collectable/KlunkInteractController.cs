@@ -17,6 +17,7 @@ public class KlunkInteractController : MonoBehaviour
     [Space]
 
     [SerializeField] GameObject _batteryPrefab;
+    [SerializeField] Animator _animator;
 
     public Trash CurrentTrash { get; private set; }
 

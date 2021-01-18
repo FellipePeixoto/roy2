@@ -44,6 +44,7 @@ public class RoyCharController : MonoBehaviour
     bool _ignoreAirSpeed;
     bool _dontIncrementSpeed;
     bool _hookEnabled;
+    [SerializeField] Animator _animator;
 
     public bool CanJump { get; set; } = true;
 
@@ -66,13 +67,9 @@ public class RoyCharController : MonoBehaviour
             _horizontalInertia = _rb.velocity.x;
             _rb.velocity += Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y);
             CanJump = false;
+            _animator.Play("Roy_Armature_Jump_in");
             AudioManager.instance.Play("roy_jump");
         }
-
-        //if (_hookEnabled && _rb.velocity.y <= 0)
-        //{
-        //    _hookEnabled = false;
-        //}
 
         if (_rb.velocity.y < 0 && !_hookEnabled)
         {
@@ -96,13 +93,19 @@ public class RoyCharController : MonoBehaviour
 
             if (Velocity.x > 0)
             {
+                _animator.Play("Roy_Armature_Run");
                 transform.rotation = Quaternion.Euler(0, 0, 0);
                 FacedRight = true;
             }
             else if (Velocity.x < 0)
             {
+                _animator.Play("Roy_Armature_Run");
                 transform.rotation = Quaternion.Euler(0, 180, 0);
                 FacedRight = false;
+            }
+            else
+            {
+                _animator.Play("Roy_Armature_Idle");
             }
         }
         else if (Velocity.x != 0)
