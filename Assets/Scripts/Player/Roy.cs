@@ -79,6 +79,8 @@ public class Roy : MonoBehaviour
     bool _actionMovBoostPressed;
     bool _jump;
 
+    [SerializeField] Animator _animator;
+
     private void Reset()
     {
         _characterController = GetComponent<RoyCharController>();
@@ -109,6 +111,7 @@ public class Roy : MonoBehaviour
         _actionMov2 = playerInputComponent.actions["Mov2"];
         _actionMov2.performed += _actionMov2_performed;
         _actionMov2.canceled += _actionMov2_canceled;
+        _animator.Play("Roy_Armature_Idle");
     }
 
     private void _actionJump_performed(InputAction.CallbackContext obj)

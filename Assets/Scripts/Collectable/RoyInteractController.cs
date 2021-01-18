@@ -14,6 +14,7 @@ public class RoyInteractController : MonoBehaviour
     [SerializeField] Vector3 _dropPositionOffset = (Vector3.right * .2f) + Vector3.one;
     [SerializeField] LayerMask _dropMask = (1 << 8);
     [SerializeField] Color _debbugDropTrashColor = Color.cyan;
+    [SerializeField] Animator _animator;
     [Space]
 
     [SerializeField] GameObject _bottlePrefab;
@@ -59,6 +60,7 @@ public class RoyInteractController : MonoBehaviour
     {
         if (CurrentTrash != null && CanDropTrash(_trashSize))
         {
+            _animator.Play("Roy_Armature_Descompactar  ");
             _currentDebbugColorTrash = Color.clear;
             Vector3 offset = new Vector3(transform.right.x * _dropPositionOffset.x, transform.right.y * _dropPositionOffset.y);
             CurrentTrash.DropTrash(_mainCollider.bounds.center + offset);
@@ -70,6 +72,7 @@ public class RoyInteractController : MonoBehaviour
 
         if (CurrentTrash == null && cols.Length > 0)
         {
+            _animator.Play("Roy_Armature_coletar");
             Trash trash = PickNearest(cols).gameObject.GetComponentInParent<Trash>();
             _trashSize = trash.TrashCollider().bounds.size;
             trash.HideTrash();

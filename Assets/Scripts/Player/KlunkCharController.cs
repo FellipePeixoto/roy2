@@ -43,6 +43,7 @@ public class KlunkCharController : MonoBehaviour
     bool _ignoreSpeedSmooth;
     bool _ignoreAirSpeed;
     bool _dontIncrementSpeed;
+    [SerializeField] Animator _animator;
 
     public bool CanJump { get; set; } = true;
 
@@ -56,12 +57,14 @@ public class KlunkCharController : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _animator.Play("Klunk_Idle");
     }
 
     private void FixedUpdate()
     {
         if (_jump && IsGrounded() && CanJump)
         {
+            _animator.Play("Klunk_Jump_in");
             _horizontalInertia = _rb.velocity.x;
             _rb.velocity += Vector3.up * Mathf.Sqrt(_jumpHeight * -2f * Physics.gravity.y);
             CanJump = false;
@@ -86,13 +89,19 @@ public class KlunkCharController : MonoBehaviour
 
         if (Velocity.x > 0)
         {
+            _animator.Play("Klunk_Run");
             transform.rotation = Quaternion.Euler(0, 0, 0);
             FacedRight = true;
         }
         else if (Velocity.x < 0)
         {
+            _animator.Play("Klunk_Run");
             transform.rotation = Quaternion.Euler(0, 180, 0);
             FacedRight = false;
+        }
+        else
+        {
+            _animator.Play("Klunk_Idle");
         }
     }
 

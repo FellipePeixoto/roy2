@@ -5372,6 +5372,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Set_KLUNK
       objectReference: {fileID: 0}
+    - target: {fileID: 4828082284466744314, guid: 91e938a864d4a7741bf3eb360a12cb3d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4828082284466744315, guid: 91e938a864d4a7741bf3eb360a12cb3d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5796,6 +5801,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Set_PlayerRoy
+      objectReference: {fileID: 0}
+    - target: {fileID: 635244282097056159, guid: 7a83110a11c770746a07df9e739f9c7b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a83110a11c770746a07df9e739f9c7b, type: 3}
