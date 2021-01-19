@@ -18,11 +18,6 @@ public class ScavengeController : MonoBehaviour
     bool _goingRight = true;
     [SerializeField] float _timerToTurn = 2;
 
-    private void Reset()
-    {
-        _rb = GetComponent<Rigidbody>();
-    }
-
     private void Start()
     {
         if (_startFromLeft)

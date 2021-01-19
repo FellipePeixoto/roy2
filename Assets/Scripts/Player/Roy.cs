@@ -162,6 +162,7 @@ public class Roy : MonoBehaviour
 
     private void OnGUI()
     {
+        return;
         GUI.BeginGroup(new Rect(0, 720, 480, 360));
         GUIStyle style = GUI.skin.box;
         style.fontSize = 40;

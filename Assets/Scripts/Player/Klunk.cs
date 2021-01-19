@@ -281,6 +281,7 @@ public class Klunk : MonoBehaviour
 
     private void OnGUI()
     {
+        return;
         GUI.BeginGroup(new Rect(1440, 720, 480, 360));
         GUIStyle style = GUI.skin.box;
         style.fontSize = 40;

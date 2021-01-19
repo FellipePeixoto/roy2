@@ -11,11 +11,6 @@ public class CarryPlayer : MonoBehaviour
     Vector3 _lastPosition;
     Transform _transform;
 
-    private void Reset()
-    {
-        _rigidbody = GetComponent<Rigidbody>();        
-    }
-
     void Start()
     {
         _transform = transform;
