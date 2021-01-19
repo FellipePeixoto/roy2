@@ -9,99 +9,124 @@ public class Pumper : MonoBehaviour
     [SerializeField] Transform _pumper;
     [SerializeField] Transform _restPosition;
     [SerializeField] Transform _upperPosition;
-    [SerializeField] LeanTweenType _easetype;
+    [SerializeField] LeanTweenType _easetypeGoUp;
+    [SerializeField] LeanTweenType _easetypeGoDown;
     [SerializeField] float _timeToComplete;
     [SerializeField] Vector3 _scanBoxPlatOffest;
     [SerializeField] Vector3 _scanBoxPlatHalfExtends;
     [SerializeField] Vector3 _scanBoxHalfExtends = new Vector3(.5f, 1, .5f);
-    [SerializeField] float _offsetFromCenter = 3;
+    [SerializeField] Vector3 _offsetFromCenter;
     [SerializeField] Color _scanBoxDebbugColor = Color.red;
     [SerializeField] LayerMask _whereIsGas = (1 << 0);
     [SerializeField] GasRobber _gasRobber;
 
     PumperState _currentState = PumperState.RestPosition;
-    LTDescr _goUp;
+    LTDescr _currentTween;
 
     private void FixedUpdate()
     {
         Collider[] cols = CastSides();
         if (cols.Length > 0)
         {
-            AttackSides();
+            switch (_currentState)
+            {
+                case PumperState.GoingUp:
+                case PumperState.OnTop:
+                    GoDown();
+                    break;
+            }
+            if(_currentState == PumperState.RestPosition)
+            {
+                AttackSides(cols);
+            }
             return;
         }
 
         cols = CastPlat();
         if (cols.Length > 0)
         {
-            GoingUp();
+            switch (_currentState)
+            {
+                case PumperState.GoingDown:
+                case PumperState.RestPosition:
+                    GoUp();
+                    break;
+            }
+            return;
         }
-
-        if (_currentState == PumperState.OnTop)
+        else
         {
-            GoDown();
+            switch (_currentState)
+            {
+                case PumperState.GoingUp:
+                case PumperState.OnTop:
+                    GoDown();
+                    break;
+            }
+            return;
         }
     }
 
-    void AttackSides()
+    void AttackSides(Collider[] cols)
     {
-        switch (_currentState)
+        foreach (Collider col in cols)
         {
-            case PumperState.GoingUp:
-            case PumperState.OnTop:
-                if (_goUp != null)
-                    GoDown();
-                break;
-
-            case PumperState.RestPosition:
-                Collider[] cols = CastSides();
-                foreach (Collider col in cols)
-                {
-                    _gasRobber.TryToStealGas(col.transform.GetInstanceID());
-                }
-                break;
+            _gasRobber.TryToStealGas(col.transform.GetInstanceID());
         }
     }
 
     void GoDown()
     {
-        if (_goUp != null)
+        if (_currentTween != null)
         {
-            LeanTween.cancel(_goUp.id);
-            _goUp = null;
+            LeanTween.cancel(_currentTween.id);
+            _currentTween = null;
         }
 
-        _currentState = PumperState.GoingDown;
+        float totalDistance = Vector3.Distance(_restPosition.transform.position, _upperPosition.transform.position);
+        float currentDistance = Vector3.Distance(_pumper.transform.position, _restPosition.transform.position);
 
-        LeanTween
-            .move(_pumper.gameObject, _restPosition, _timeToComplete)
-            .setEase(_easetype)
+        float normalizedPosition = currentDistance / totalDistance;
+
+        _currentTween = LeanTween
+            .move(_pumper.gameObject, _restPosition, normalizedPosition * _timeToComplete)
+            .setEase(_easetypeGoDown)
             .setOnComplete(() =>
             {
                 _currentState = PumperState.RestPosition;
             });
+
+        _currentState = PumperState.GoingDown;
     }
 
-    void GoingUp()
+    void GoUp()
     {
-        _currentState = PumperState.GoingUp;
-        if (_goUp == null)
+        if (_currentTween != null)
         {
-            _goUp = LeanTween
-            .move(_pumper.gameObject, _upperPosition, _timeToComplete)
-            .setEase(_easetype)
+            LeanTween.cancel(_currentTween.id);
+            _currentTween = null;
+        }
+
+        float totalDistance = Vector3.Distance(_restPosition.transform.position, _upperPosition.transform.position);
+        float currentDistance = Vector3.Distance(_pumper.transform.position, _upperPosition.transform.position);
+
+        float normalizedPosition = currentDistance / totalDistance;
+
+        _currentTween = LeanTween
+            .move(_pumper.gameObject, _upperPosition, normalizedPosition * _timeToComplete)
+            .setEase(_easetypeGoUp)
             .setOnComplete(() =>
             {
                 _currentState = PumperState.OnTop;
             });
-        }
+
+        _currentState = PumperState.GoingUp;
     }
 
     Collider[] CastSides()
     {
         List<Collider> colls = new List<Collider>();
-        colls.AddRange(Physics.OverlapBox(transform.position + Vector3.right * _offsetFromCenter, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas));
-        colls.AddRange(Physics.OverlapBox(transform.position + Vector3.left * _offsetFromCenter, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas));
+        colls.AddRange(Physics.OverlapBox(transform.position + _offsetFromCenter, _scanBoxHalfExtends, Quaternion.identity, _whereIsGas));
 
         return colls.ToArray();
     }
@@ -118,8 +143,7 @@ public class Pumper : MonoBehaviour
     {
         Gizmos.color = _scanBoxDebbugColor;
 
-        Gizmos.DrawWireCube(transform.position + Vector3.right * _offsetFromCenter, _scanBoxHalfExtends * 2);
-        Gizmos.DrawWireCube(transform.position + Vector3.left * _offsetFromCenter, _scanBoxHalfExtends * 2);
+        Gizmos.DrawWireCube(transform.position + _offsetFromCenter, _scanBoxHalfExtends * 2);
         Gizmos.DrawWireCube(_pumper.transform.position + _scanBoxPlatOffest, _scanBoxPlatHalfExtends * 2);
     }
 }

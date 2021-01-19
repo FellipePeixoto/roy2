@@ -23,6 +23,7 @@ public class Grabber : MonoBehaviour
     public event DetectMagneticHandler OnDetectMagnetic;
 
     List<Magnetic> _detected = new List<Magnetic>();
+    [SerializeField] Animator _animator;
 
     private void Reset()
     {
@@ -30,11 +31,31 @@ public class Grabber : MonoBehaviour
         _magnet = GetComponent<Magnet>();
     }
 
+    private void Awake()
+    {
+        _animator = GetComponentInChildren<Animator>();
+        _animator.Play("Grabber_Armature|Idle_Closed");
+    }
+
     private void FixedUpdate()
     {
+        Collider[] inSide = Physics.OverlapSphere(_mainCollider.bounds.center, _radius, _whereIsMagnetics);
+        if (inSide.Length > 0)
+        {
+            _animator.Play("Grabber_Armature_Atento_Loop");
+            foreach (Collider col in inSide)
+            {
+                float distanceFactor = 1 - (Vector3.Distance(col.transform.position, _mainCollider.bounds.center) / _radius);
+                distanceFactor = Mathf.Abs(distanceFactor);
+                _magnet.TryAttractMagnetic(col.transform.GetInstanceID(), distanceFactor);
+            }
+            return;
+        }
+
         Collider[] inSensor = Physics.OverlapSphere(_mainCollider.bounds.center, _sensorRadius, _whereIsMagnetics);
         if (inSensor.Length > 0)
         {
+            _animator.Play("Grabber_Armature_Atento_in");
             foreach (Collider col in inSensor)
             {
                 Magnetic magnet = _magnet.GetMagnetic(col.transform.GetInstanceID());
@@ -49,17 +70,7 @@ public class Grabber : MonoBehaviour
         else
         {
             _detected.RemoveRange(0, _detected.Count);
-        }
-
-        Collider[] inSide = Physics.OverlapSphere(_mainCollider.bounds.center, _radius, _whereIsMagnetics);
-        if (inSide.Length > 0)
-        {
-            foreach (Collider col in inSide)
-            {
-                float distanceFactor = 1 - (Vector3.Distance(col.transform.position, _mainCollider.bounds.center) / _radius);
-                distanceFactor = Mathf.Abs(distanceFactor);
-                _magnet.TryAttractMagnetic(col.transform.GetInstanceID(), distanceFactor);
-            }
+            _animator.Play("Grabber_Armature_Idle_Closed");
         }
     }
 
