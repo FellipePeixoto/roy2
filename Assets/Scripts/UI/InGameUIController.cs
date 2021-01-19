@@ -21,7 +21,7 @@ public class InGameUIController : MonoBehaviour
 
     void Update()
     {
-        if(Gamepad.current != null && Gamepad.current.startButton.wasPressedThisFrame)
+        if(Gamepad.current != null && Gamepad.current.startButton.wasReleasedThisFrame)
         {
             PauseGame(!_paused);
         }

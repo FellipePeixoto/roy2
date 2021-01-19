@@ -13,11 +13,6 @@ public class Magnet : MonoBehaviour
 
     Dictionary<int, Magnetic> _magnetics = new Dictionary<int, Magnetic>();
 
-    private void Reset()
-    {
-        _mainCollider = GetComponent<Collider>();
-    }
-
     private void Awake()
     {
         //TODO: CENTRALIZAR NO MANAGER

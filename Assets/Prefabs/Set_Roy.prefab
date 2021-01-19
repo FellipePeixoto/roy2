@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 285075692}
   - component: {fileID: 6182821063658705899}
   - component: {fileID: 6926806554069722478}
+  - component: {fileID: 512371251}
   m_Layer: 0
   m_Name: Set_Roy
   m_TagString: Player
@@ -261,6 +262,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 635244282097056146}
   _effectDuration: 0.75
+--- !u!114 &512371251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635244282097056159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!95 &5388445255925938189
 Animator:
   serializedVersion: 3

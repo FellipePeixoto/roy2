@@ -118,30 +118,22 @@ public class Klunk : MonoBehaviour
 
     private void _onPlayerPull_Magnetic()
     {
-        if (inGameUIController.Paused)
-            return;
         _energyConsumed += _energyConsumed * _energyLossPerSecond * Time.fixedDeltaTime;
     }
 
     private void _actionJump_performed(InputAction.CallbackContext obj)
     {
-        if (inGameUIController.Paused)
-            return;
         _jump = true;
     }
 
     private void _actionJump_canceled(InputAction.CallbackContext obj)
     {
-        if (inGameUIController.Paused)
-            return;
         _jump = false;
         _characterController.CanJump = true;
     }
 
     private void _frontAttackChecker_OnTriggerEnterEvent(int layer)
     {
-        if (inGameUIController.Paused)
-            return;
         if (LayerMask.NameToLayer("Ground") == layer)
         {
             _hitWallWhileDash = true;
@@ -150,15 +142,11 @@ public class Klunk : MonoBehaviour
 
     private void _actionMov2_performed(InputAction.CallbackContext obj)
     {
-        if (inGameUIController.Paused)
-            return;
         _actionMov2Pressed = true;
     }
 
     private void _actionMov2_canceled(InputAction.CallbackContext obj)
     {
-        if (inGameUIController.Paused)
-            return;
         _actionMov2Pressed = false;
     }
 

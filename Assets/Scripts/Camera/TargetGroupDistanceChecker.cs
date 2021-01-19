@@ -18,6 +18,12 @@ public class TargetGroupDistanceChecker : MonoBehaviour
         _targetGroupController = GetComponent<TargetGroupController>();
     }
 
+    private void Awake()
+    {
+        _roy = FindObjectOfType<Roy>().transform;
+        _klunk = FindObjectOfType<Klunk>().transform;
+    }
+
     void Update()
     {
         float dist = Vector3.Distance(_roy.position, _klunk.position);

@@ -81,7 +81,6 @@ public class Roy : MonoBehaviour
     bool _actionMovBoostPressed;
     bool _jump;
     bool _isWalking, _isHovering;
-    private InGameUIController inGameUIController;
 
     [SerializeField] Animator _animator;
 
@@ -121,58 +120,43 @@ public class Roy : MonoBehaviour
         _actionMov2.performed += _actionMov2_performed;
         _actionMov2.canceled += _actionMov2_canceled;
         _animator.Play("Roy_Armature_Idle");
-        inGameUIController = FindObjectOfType<InGameUIController>();
     }
 
     
 
     private void _actionJump_performed(InputAction.CallbackContext obj)
     {
-        if (inGameUIController.Paused)
-            return;
         _jump = true;
     }
 
     private void _actionJump_canceled(InputAction.CallbackContext obj)
     {
-        if (inGameUIController.Paused)
-            return;
         _jump = false;
         _characterController.CanJump = true;
     }
 
     private void _actionMov2_canceled(InputAction.CallbackContext obj)
     {
-        if (inGameUIController.Paused)
-            return;
         _actionMovBoostPressed = false;
     }
 
     private void _actionMov2_performed(InputAction.CallbackContext obj)
     {
-        if (inGameUIController.Paused)
-            return;
         _actionMovBoostPressed = true;
     }
 
     private void _actionMov1_canceled(InputAction.CallbackContext obj)
     {
-        if (inGameUIController.Paused)
-            return;
         _actionMovHookPressed = false;
     }
 
     private void _actionMov1_started(InputAction.CallbackContext obj)
     {
-        if (inGameUIController.Paused)
-            return;
         _actionMovHookPressed = true;
     }
 
     private void _onPlayerPull_Magnetic()
     {
-        if (inGameUIController.Paused)
-            return;
         _energyConsumed += _energyConsumed * _energyLossPerSecond * Time.fixedDeltaTime;
     }
 
