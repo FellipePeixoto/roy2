@@ -23,6 +23,13 @@ public class Pumper : MonoBehaviour
     PumperState _currentState = PumperState.RestPosition;
     LTDescr _currentTween;
 
+    [SerializeField] Animator _animator;
+
+    private void Awake()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
     private void FixedUpdate()
     {
         Collider[] cols = CastSides();
@@ -32,14 +39,20 @@ public class Pumper : MonoBehaviour
             {
                 case PumperState.GoingUp:
                 case PumperState.OnTop:
+                    _animator.Play("Armature_Up");
                     GoDown();
                     break;
             }
             if(_currentState == PumperState.RestPosition)
             {
+                _animator.Play("Armature_Idle");
                 AttackSides(cols);
             }
             return;
+        }
+        else
+        {
+            _animator.Play("Armature_Idle");
         }
 
         cols = CastPlat();
@@ -49,6 +62,7 @@ public class Pumper : MonoBehaviour
             {
                 case PumperState.GoingDown:
                 case PumperState.RestPosition:
+                    _animator.Play("Armature_Down");
                     GoUp();
                     break;
             }
@@ -60,6 +74,7 @@ public class Pumper : MonoBehaviour
             {
                 case PumperState.GoingUp:
                 case PumperState.OnTop:
+                    _animator.Play("Armature_Up");
                     GoDown();
                     break;
             }
