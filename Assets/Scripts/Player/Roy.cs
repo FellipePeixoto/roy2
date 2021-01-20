@@ -340,6 +340,11 @@ public class Roy : MonoBehaviour
         OnCurrentEnergyChange?.Invoke((float)_currentEnergy / _maxEnergy);
     }
 
+    public void DecreaseFuel(float perSecond)
+    {
+        _fuelConsumed += perSecond * Time.fixedDeltaTime;
+    }
+
     private void OnDrawGizmos()
     {
         if (_actionMove == null)

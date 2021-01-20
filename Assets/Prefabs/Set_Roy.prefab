@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6182821063658705899}
   - component: {fileID: 6926806554069722478}
   - component: {fileID: 512371251}
+  - component: {fileID: 8856555327151104125}
   m_Layer: 0
   m_Name: Set_Roy
   m_TagString: Player
@@ -52,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d6f34ca6b065e341afaa0a3ea897692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _infinityMode: 1
+  _infinityMode: 0
   _maxEnergy: 100
   _maxFuel: 100
   _energyTimeDuration: 600
@@ -280,6 +281,18 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &8856555327151104125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635244282097056159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2b9fbec18b5d3342b3ea6ac767128d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &5388445255925938189
 Animator:
   serializedVersion: 3

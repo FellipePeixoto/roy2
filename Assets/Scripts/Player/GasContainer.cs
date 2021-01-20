@@ -11,5 +11,16 @@ public class GasContainer : MonoBehaviour
     public void Pick(float perSecond)
     {        
         OnPump?.Invoke();
+        Roy roy = GetComponent<Roy>();
+        if (roy)
+        {
+            roy.DecreaseFuel(perSecond);
+            return;
+        }
+        Klunk klunk = GetComponent<Klunk>();
+        if (klunk)
+        {
+            klunk.DecreaseFuel(perSecond);
+        }
     }
 }

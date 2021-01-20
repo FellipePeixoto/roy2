@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -277,6 +278,11 @@ public class Klunk : MonoBehaviour
         _currentFuel = Mathf.Clamp(_currentFuel + _collectedBottleRechargeValue, 0, _maxFuel);
         OnCurrentFuelChange?.Invoke((float)_currentFuel / _maxFuel);
         //AudioManager.instance.Play("klunk_fuelrecharge");
+    }
+
+    public void DecreaseFuel(float perSecond)
+    {
+        _fuelConsumed += perSecond * Time.fixedDeltaTime;
     }
 
     private void OnGUI()
