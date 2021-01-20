@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d6f34ca6b065e341afaa0a3ea897692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _infinityMode: 0
+  _infinityMode: 1
   _maxEnergy: 100
   _maxFuel: 100
   _energyTimeDuration: 600
