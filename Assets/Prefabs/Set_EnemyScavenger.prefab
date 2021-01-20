@@ -69,7 +69,7 @@ MonoBehaviour:
   _rb: {fileID: 5138895825378402510}
   _scavenger: {fileID: 4295317527071746509}
   _mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
-  _leanType: 4
+  _leanType: 14
   _startFromLeft: 1
   _maxDistance: 14
   _debbugMaxDistanceColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
