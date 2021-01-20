@@ -17,6 +17,9 @@ public class EletricThread : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_end)
+            return;
+
         Collider[] cols =  
             Physics.OverlapBox(transform.position, _killZone.extents, Quaternion.identity, _whereIsPlayers);
 
@@ -25,7 +28,7 @@ public class EletricThread : MonoBehaviour
             SceneFlow sceneFlow = FindObjectOfType<SceneFlow>();
             if (sceneFlow != null)
             {
-                _end = false;
+                _end = true;
                 sceneFlow.StartCoroutine(sceneFlow.ReloadLoadSceneSmoth());
             }
         }
