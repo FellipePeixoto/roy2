@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MainMenuController : MonoBehaviour
 {
     [SerializeField] GameObject[] screens, optionTab;
-    [SerializeField] GameObject delSlotScreen;
+    [SerializeField] GameObject delSlotScreen, btQuitCredits;
     [SerializeField] Button[] quitBts;
     int currentScreen = 0, selectedSlot=0, currentOptionTab = 0;
     [SerializeField] GameObject[] mainSelects, optSelects, slotSelects;
@@ -60,6 +60,9 @@ public class MainMenuController : MonoBehaviour
                 break;
             case 3:
                 optSelects[0].GetComponentInParent<Button>().Select();
+                break;
+            case 4:
+                btQuitCredits.GetComponent<Button>().Select();
                 break;
         }
     }
