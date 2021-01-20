@@ -41,13 +41,11 @@ public class SceneFlow : MonoBehaviour
 
         if (!_bounds.Contains(_roy.transform.position) || !_bounds.Contains(_klunk.transform.position))
         {
-            _resetingPosition = true;
             StartCoroutine(ReloadLoadSceneSmoth());
         }
 
         if (_finishZone.Contains(_roy.transform.position) && _finishZone.Contains(_klunk.transform.position))
         {
-            _changing = true;
             StartCoroutine(LoadNextSceneSmoth());
         }
     }
@@ -60,8 +58,9 @@ public class SceneFlow : MonoBehaviour
         Gizmos.DrawCube(_finishZone.center, _finishZone.size);
     }
 
-    IEnumerator LoadNextSceneSmoth()
+    public IEnumerator LoadNextSceneSmoth()
     {
+        _changing = true;
         _roy = null;
         _klunk = null;
         bool ok = false;
@@ -95,8 +94,9 @@ public class SceneFlow : MonoBehaviour
         Destroy(currentSceneFlow.gameObject);
     }
 
-    IEnumerator ReloadLoadSceneSmoth()
+    public IEnumerator ReloadLoadSceneSmoth()
     {
+        _resetingPosition = true;
         _roy = null;
         _klunk = null;
         bool ok = false;
@@ -110,6 +110,7 @@ public class SceneFlow : MonoBehaviour
         yield return SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
         LeanTween.value(gameObject, (x) => { _hidder.alpha = x; }, 1, 0, _fadeOutTime)
                     .setEase(_fadeOutType);
+        _resetingPosition = false;
         SceneFlow currentSceneFlow = FindObjectOfType<SceneFlow>();
         if (currentSceneFlow == null)
         {

@@ -18,7 +18,7 @@ public class Battery : MonoBehaviour
             100, 1 << LayerMask.NameToLayer("Ground"));
         if (hit)
         {
-            transform.position = new Vector3(transform.position.x, hitInfo.point.y);
+            transform.position = new Vector3(transform.position.x, hitInfo.point.y, hitInfo.point.z);
         }
     }
 

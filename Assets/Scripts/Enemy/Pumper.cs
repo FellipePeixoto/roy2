@@ -27,7 +27,27 @@ public class Pumper : MonoBehaviour
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        _animator.Play("");
+        _animator.Play("Armature_Idle");
+    }
+
+    private void Update()
+    {
+        switch (_currentState)
+        {
+            case PumperState.GoingDown:
+                _animator.Play("Armature_Down");
+                break;
+
+            case PumperState.GoingUp:
+                _animator.Play("Armature_Up");
+                break;
+
+            case PumperState.RestPosition:
+            case PumperState.OnTop:
+                _animator.Play("Armature_Idle");
+                break;
+        }
     }
 
     private void FixedUpdate()
@@ -39,20 +59,14 @@ public class Pumper : MonoBehaviour
             {
                 case PumperState.GoingUp:
                 case PumperState.OnTop:
-                    _animator.Play("Armature_Up");
                     GoDown();
                     break;
             }
             if(_currentState == PumperState.RestPosition)
             {
-                _animator.Play("Armature_Idle");
                 AttackSides(cols);
             }
             return;
-        }
-        else
-        {
-            _animator.Play("Armature_Idle");
         }
 
         cols = CastPlat();
@@ -62,7 +76,6 @@ public class Pumper : MonoBehaviour
             {
                 case PumperState.GoingDown:
                 case PumperState.RestPosition:
-                    _animator.Play("Armature_Down");
                     GoUp();
                     break;
             }
@@ -74,7 +87,6 @@ public class Pumper : MonoBehaviour
             {
                 case PumperState.GoingUp:
                 case PumperState.OnTop:
-                    _animator.Play("Armature_Up");
                     GoDown();
                     break;
             }

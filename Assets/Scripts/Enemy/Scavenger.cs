@@ -13,9 +13,16 @@ public class Scavenger : MonoBehaviour
     [SerializeField] Color _debbugMagnetZoneColor = Color.white;
     [SerializeField] LayerMask _whereIsMagnetics = (1 << 0);
 
+    [SerializeField] Animator _animator;
+
     private void Reset()
     {
         _magnet = GetComponent<Magnet>();
+    }
+
+    private void Awake()
+    {
+        _animator.Play("Armação_Walk");
     }
 
     private void FixedUpdate()

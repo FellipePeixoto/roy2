@@ -294,6 +294,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   _gasRobber: {fileID: 1863672128486200822}
+  _animator: {fileID: 5328240921048858986}
 --- !u!114 &1863672128486200822
 MonoBehaviour:
   m_ObjectHideFlags: 0
